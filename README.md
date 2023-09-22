@@ -23,3 +23,9 @@ Have you ever decided to revamp your life, started on a bunch of new habits, and
 - **Websocket data:** This will be the scoring data, which will rerpresent every time another user updates their habit history, changing their score. 
 
 ### Images
+
+![Rough sketch of the website design](/images/website_sketch.png)
+
+Overall layout of the website. This is inspired in part by a feature of the flashcard app Anki (see below), which shows the days where reviews have been done, with different intensities of blue reflecting number of reviews, but generalized for any habit. 
+
+![Image of history from Anki](/images/anki_tracker.png)
