@@ -14,4 +14,4 @@ Git/GitHub:
    - Conflicts only occur when the exact same line has been changed - otherwise it can combine them without any issues
 
 Remote shell to web server:
-- ssh -i cs260_key.pem ubuntu@54.166.146.216
+- ssh -i cs260_key.pem ubuntu@52.72.74.101
