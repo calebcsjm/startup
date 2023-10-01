@@ -4,22 +4,21 @@
     <meta charset="UTF-8" />
     <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simon HTML</title>
-    <link rel="icon" href="favicon.ico" />
+    <title>Priority</title>
   </head>
   <body>
     <!-- Use header, main, and footer elements to give semantic structure -->
     <header>
-      <h1>Simon<sup>&reg;</sup></h1>
+      <h1>Prioirt<s>ies</s>y</h1>
 
       <!-- Navigation elements -->
       <nav>
         <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
         <menu>
           <li><a href="index.html">Home</a></li>
-          <li><a href="play.html">Play</a></li>
-          <li><a href="scores.html">Scores</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="goaltracker.html">Tracker</a></li>
+          <li><a href="scores.html">Scoreboard</a></li>
+          <li><a href="philosophy.html">Philosophy</a></li>
         </menu>
       </nav>
 
@@ -29,19 +28,21 @@
 
     <main>
       <h1>Welcome</h1>
-      <p>Login to play</p>
+      <p>Login to track your goal</p>
       <form method="get" action="play.html">
-        <label for="name">Name</label>
+        <label for="name">Username</label>
         <input type="text" id="name" placeholder="Your name here" />
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Your password here" />
         <button type="submit">Login</button>
       </form>
     </main>
 
     <footer>
       <hr />
-      <span class="text-reset">Author Name(s)</span>
+      <span class="text-reset">Caleb Harding</span>
       <br />
-      <a href="https://github.com/webprogramming260/simon-html">GitHub</a>
+      <a href="https://github.com/calebcsjm/startup">GitHub</a>
     </footer>
   </body>
 </html>
