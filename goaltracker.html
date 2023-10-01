@@ -27,72 +27,66 @@
     </header>
 
     <main>
-      <div class="players">
-        Player:
-        <span class="player-name">Mystery player</span>
-      </div>
-      <ul class="notification">
-        <li class="player-name">Tim started a new game</li>
-        <li class="player-name">Ada started a new game</li>
-        <li class="player-name">Tim scored 337</li>
-      </ul>
-
-      <!-- More formatting with old style HTML -->
-      <br />
-
-      <div>
-        <label for="count">Score</label>
-        <input type="text" id="count" value="--" readonly />
-      </div>
-
-      <br />
-
-      <div>
-        <button>Reset</button>
-      </div>
-
-      <br />
-
-      <div>
-        <table>
+      <h3>Tracker</h3>
+      <table>
+        <thead>
           <tr>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <!-- SVG
-                    M move <to x,y>
-                    Q quadratic curve <control point x,y> <to x,y>
-                -->
-                  <path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />
-                </svg>
-              </button>
-            </td>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M5,5 5,95 95,95 Q 95,5 5,5" fill="red" />
-                </svg>
-              </button>
-            </td>
+            <th>M</th>
+            <th>T</th>
+            <th>W</th>
+            <th>T</th>
+            <th>F</th>
+            <th>S</th>
+            <th>S</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" id="checkbox1" name="varCheckbox" value="checkbox1" checked /></td>
+            <td><input type="checkbox" id="checkbox2" name="varCheckbox" value="checkbox2" checked /></td>
+            <td><input type="checkbox" id="checkbox3" name="varCheckbox" value="checkbox3" checked /></td>
+            <td><input type="checkbox" id="checkbox4" name="varCheckbox" value="checkbox4" checked /></td>
+            <td><input type="checkbox" id="checkbox5" name="varCheckbox" value="checkbox5" checked /></td>
+            <td><input type="checkbox" id="checkbox6" name="varCheckbox" value="checkbox6" checked /></td>
+            <td><input type="checkbox" id="checkbox7" name="varCheckbox" value="checkbox7" checked /></td>
           </tr>
           <tr>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M5,5 95,5 95,95 Q 5,95 5,5" fill="blue" />
-                </svg>
-              </button>
-            </td>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M95,5 5,5 5,95 Q 95,95 95,5" fill="yellow" />
-                </svg>
-              </button>
-            </td>
+            <td><input type="checkbox" id="checkbox8" name="varCheckbox" value="checkbox8" checked /></td>
+            <td><input type="checkbox" id="checkbox9" name="varCheckbox" value="checkbox9" /></td>
+            <td><input type="checkbox" id="checkbox10" name="varCheckbox" value="checkbox10" /></td>
+            <td><input type="checkbox" id="checkbox11" name="varCheckbox" value="checkbox11"  /></td>
+            <td><input type="checkbox" id="checkbox12" name="varCheckbox" value="checkbox12" /></td>
+            <td><input type="checkbox" id="checkbox13" name="varCheckbox" value="checkbox13"  /></td>
+            <td><input type="checkbox" id="checkbox14" name="varCheckbox" value="checkbox14"  /></td>
           </tr>
-        </table>
+        </tbody>
+      </table>
+
+      <div>
+        <ul>
+          <li>
+            <label for="text">Habit: </label>
+            <input type="text" id="habit-name" name="varHabit" placeholder="Enter the name of your habit here"/>    
+          </li>
+          <li>
+            <label for="text">Description: </label>
+            <input type="text" id="habit-description" name="varHabitDesc" placeholder="Describe the habit - activity, time, location, etc."/>   
+          </li>
+          <li>
+            <label for="count">Days: </label>
+            <input type="text" id="day-count" value="--" readonly />
+          </li>
+          <li>
+            <label for="count">Frequency: </label>
+            <input type="text" id="habit-frequency" value="--" readonly />
+          </li>
+          <li>
+            <label for="count">Score: </label>
+            <input type="text" id="score" value="--" readonly />
+          </li>
+        </ul>
       </div>
+      
     </main>
 
     <footer>
