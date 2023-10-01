@@ -29,3 +29,15 @@ Have you ever decided to revamp your life, started on a bunch of new habits, and
 Overall layout of the website. This is inspired in part by a feature of the flashcard app Anki (see below), which shows the days where reviews have been done, with different intensities of blue reflecting number of reviews, but generalized for any habit. 
 
 ![Image of history from Anki](/images/anki_tracker.png)
+
+## HTML
+
+This project implements the requirements in the following ways:
+- HTML pages: My project is like Simon in that it uses 4 HTML pages with similar functions. All 4 of those pages were added: Home, Tracker, Scoreboard, and Philosophy
+- Links between pages: All four pages are accessible at all times from the navigation bar (although it is a column at this point)
+- Textual Content: A brief into to the philosophy/rational behind the applicaiton was added to the Philosophy page
+- Placeholder for 3rd party service calls: On the Home page there is an inspiriation/thought-provoking quote, which I will get from the BestQuotes API
+- Application Images: On the Philosophy page, an image is included from the book "Essentialism," which reflects the philosphy of the application
+- Login placeholder: The login placeholder is on the Home page
+- Database placeholder: The information presented in the Tracker page (currently implemented with checkboxes that are default checked) will be drawn from a database to track which days they have completed the Habit
+- Websocket placeholder: The bottom of the Scoreboard page has realtime updates about who has completed their habit already that day, streaks, etc.
