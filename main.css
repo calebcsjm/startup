@@ -44,6 +44,8 @@ main {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    
+
 }
 
 .quote-of-day {

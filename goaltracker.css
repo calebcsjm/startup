@@ -2,3 +2,24 @@ th {
     font-weight: bold;
     font-style: italic;
 }
+
+ul {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+div.settings {
+    display:grid;
+    grid-template-columns: max-content max-content;
+    grid-gap:5px;
+}
+div.settings label       { text-align:left; }
+div.settings label:after { content: ":"; }
+
+/* label {
+    text-align: left;
+}
+input { 
+    align-items: end;
+} */

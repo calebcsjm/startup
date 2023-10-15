@@ -3,6 +3,10 @@ th {
     font-style: italic;
 }
 
-.score-updates {
-    float: left;
+div.score-updates {
+    text-align: left;
+}
+
+.update-heading {
+    border-bottom: solid white thin;
 }
