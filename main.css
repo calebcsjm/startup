@@ -28,9 +28,10 @@ menu .nav-item {
 main {
     flex: 1 calc(100vh - 130px);
     padding-top: 1em;
-    flex-direction: column;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .form-item {
@@ -65,3 +66,15 @@ footer {
 .source-code {
     float: right;
 }
+
+@media (max-height: 600px) {
+    header {
+      display: none;
+    }
+    footer {
+      display: none;
+    }
+    main {
+      flex: 1 100vh;
+    }
+  }

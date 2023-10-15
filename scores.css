@@ -1,0 +1,8 @@
+th {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.score-updates {
+    float: left;
+}
