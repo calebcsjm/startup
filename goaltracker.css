@@ -9,14 +9,17 @@ ul {
     text-align: left;
 }
 
-div.settings {
+div.habit-overview {
     display:grid;
     grid-template-columns: max-content max-content;
     grid-gap:5px;
 }
-div.settings label       { text-align:left; }
-div.settings label:after { content: ":"; }
+div.habit-overview label       { text-align:left; }
+div.habit-overview label:after { content: ":"; }
 
+#resetHabitButton {
+    margin-top: 1em;
+}
 /* label {
     text-align: left;
 }

@@ -75,7 +75,7 @@
         </tbody>
       </table>
 
-      <div class="settings">
+      <div class="habit-overview">
         <label for="text">Habit</label>
         <input type="text" id="habit-name" name="varHabit" placeholder="Enter the name of your habit here"/>    
       
@@ -89,9 +89,10 @@
         <input type="text" id="habit-frequency" value="--" readonly />
       
         <label for="count">Score</label>
-        <input type="text" id="score" value="--" readonly />
-          
+        <input type="text" id="habit-score" value="--" readonly />
       </div>
+
+      <button type="submit" onclick="updateHabitInfo()" id="resetHabitButton" class="btn btn-primary">Reset Habit</button>  
       
     </main>
 
