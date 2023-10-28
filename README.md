@@ -41,3 +41,11 @@ This project implements the requirements in the following ways:
 - Login placeholder: The login placeholder is on the Home page
 - Database placeholder: The information presented in the Tracker page (currently implemented with checkboxes that are default checked) will be drawn from a database to track which days they have completed the Habit
 - Websocket placeholder: The bottom of the Scoreboard page has realtime updates about who has completed their habit already that day, streaks, etc.
+
+## CSS
+- Header/Footer/Main Content: Implemented - used the same bootstrap framework that Simon used, and made it consistent accross all the pages
+- Navigation elements: Implemented - navigation elements sit underneath the web-page title, and are highlighted for the given page
+- Responsive to Resizing: Implemented - Elements move to stay in the middle center of the page, tables shrink and expand, and then header/footer disapper
+- Application Elements: Not sure what this means... but I kept all the essential elements from the HTML project and included them in this iteration
+- Application Text Content: Home page includes a quote of the day in a box, with different parts of the text aligned left/center/right. Attribution text on Philosophy page is resized, stylized and placed in a background. 
+- Application Image: Image included on Philosophy page. 
