@@ -49,3 +49,9 @@ This project implements the requirements in the following ways:
 - Application Elements: Not sure what this means... but I kept all the essential elements from the HTML project and included them in this iteration
 - Application Text Content: Home page includes a quote of the day in a box, with different parts of the text aligned left/center/right. Attribution text on Philosophy page is resized, stylized and placed in a background. 
 - Application Image: Image included on Philosophy page. 
+
+## JavaScript
+- Login: The user can login, and then that information is stored in local storage and used to change the header on the Tracker page. After logging in, the Home page changes to offer a logout option. 
+- Database Data: The goaltracker.js file is will take a JSON that I will pull from a database in the future (it is defined locally now) and populate the Habit overview fields, in addition to populating a table with X's for days the habit was completed and O's for days it was missed. The time-related code was pretty messy. 
+- Websocket: There is a Live Updates feature on the Scoreboard page (scores.js) that will use a websocket in the feature (it is similar to what the Simon-javascript had). I also have a placeholder for an API call on the Home page with the quote of the day. 
+- Interaction Login: As mentioned above, the login page uses JavaScript to change substantially when a user logs in or out. It also moves the user to the Tracker page on Login. The Tracker Page starts out with an empty table that prompts input below, and then after a habit and description are entered it populates the table, calculates the values, removes the "set habit" button, and adds a "Completed Habit Today" button, which in the future will update the database. Login with username "caleb" to see the table populated with some dummy data, or with any other username to see the empty table and try entering a habit and description. 
