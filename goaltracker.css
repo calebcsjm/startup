@@ -17,8 +17,12 @@ div.habit-overview {
 div.habit-overview label       { text-align:left; }
 div.habit-overview label:after { content: ":"; }
 
-#resetHabitButton {
+#setHabitButton {
     margin-top: 1em;
+}
+
+#habitTodayButton {
+    margin: 1em;
 }
 /* label {
     text-align: left;
