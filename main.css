@@ -44,7 +44,6 @@ main {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    
 
 }
 
@@ -67,6 +66,10 @@ footer {
 
 .source-code {
     float: right;
+}
+
+#logoutButton {
+    margin: 1em;
 }
 
 @media (max-height: 600px) {

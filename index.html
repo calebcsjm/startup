@@ -37,9 +37,9 @@
       </header>
 
     <main class="container-fluid bg-secondary text-center">
-      <h1>Welcome!</h1>
-      <p>Login to track your habit</p>
-      <form method="get" action="goaltracker.html">
+      <h1 id="greeting">Welcome!</h1>
+      <p id="inviteToLogin">Login to track your habit</p>
+      <form method="get" id="loginInfoCollector" action="goaltracker.html">
         <div class="form-item"> 
           <label for="name">Username:</label>
           <input type="text" id="name" placeholder="Your name here" />  
@@ -50,6 +50,8 @@
         </div>
         <button type="submit" onclick="login()" class="btn btn-primary">Login</button>
       </form>
+      <button type="submit" onclick="logout()" id="logoutButton" class="btn btn-primary">Log Out</button>
+
 
       <div id="quote-of-day-box" class="quote-box bg-light text-dark">
         <h4 class="quote-of-day">
@@ -71,7 +73,7 @@
         <a class="source-code" href="https://github.com/calebcsjm/startup">GitHub</a>
       </div>
     </footer>
-    
+
     <script src="login.js"></script>
   </body>
 </html>
