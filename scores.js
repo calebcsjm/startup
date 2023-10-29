@@ -49,3 +49,11 @@ function loadScores() {
   }
   
   loadScores();
+
+  // future web socket plug in
+  setInterval(() => {
+    const score = Math.floor(Math.random() * 100);
+    const chatText = document.querySelector('#live-goal-updates');
+    chatText.innerHTML =
+      `<li class="goal-update"> Tim completed their habit for the day. New Score: ${score}</div>` + chatText.innerHTML;
+  }, 7000);
