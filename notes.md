@@ -475,6 +475,25 @@ p {
   }
 }
 ```
+- Rest: takes the "rest" of your parameters
+```js
+function hasNumber(test, ...numbers) {
+  return numbers.some((i) => i === test);
+}
+
+hasNumber(2, 1, 2, 3);
+// RETURNS: true
+```
+- Spread: does the opposite, takes an object that is iterable (e.g. array or string) and expands it into a function's parameters.
+```js
+function person(firstName, lastName) {
+  return { first: firstName, last: lastName };
+}
+
+const p = person(...['Ryan', 'Dahl']);
+console.log(p);
+// OUTPUT: {first: 'Ryan', last: 'Dahl'}
+```
 
 
 
