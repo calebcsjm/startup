@@ -375,6 +375,8 @@ console.log(obj, json, objFromJson);
     - resolve sets it to fulfilled state, reject sets it to rejected state
     - can use the promise object, and chain then, catch, and finally to it. then is called if the promise is fulfilled, cathc if it is rejected, and finally is always called after it is complete (no longer pending)
     - Alternatively, you can use async and await to do it
+      - The async keyword declares that a function returns a promise. The await keyword wraps a call to the async function, blocks execution until the promise has resolved, and then returns the result of the promise.
+      - That is to say, with await, I don't think you could ever have something return "pending"
     - In the following code, setTimeout takes two parameters: an to do when the time runs out, and how long to wait for
 ```js
 const coinToss = new Promise((resolve, reject) => {
@@ -423,11 +425,6 @@ async function pickupPizza() {
   }
 }
 ```
-
-
-*** add the async and await codepen example
-
-
 
 Other notes: 
 - Local storage
