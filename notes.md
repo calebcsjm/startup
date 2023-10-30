@@ -457,7 +457,7 @@ Alice
 ```
 - CSS animations
   - you can define a demo using something like @keyframes, and then add it to that element
-```js
+```css
 p {
   text-align: center;
   font-size: 20vh;
