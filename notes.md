@@ -255,8 +255,9 @@ function insertChild(parentSelector, text) {
 
 insertChild('#courses', 'new course');
 ```
+
   - You can change all the text in the element by setting el.textContent = "___", or inject straight HTML
-```
+```js
 const el = document.querySelector('div');
 el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';
 ```
