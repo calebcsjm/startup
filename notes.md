@@ -396,6 +396,34 @@ coinToss
 //    Coin toss result: tails
 //    Toss completed
 ```
+```js
+// async/await conversion
+
+function pickupPizza() {
+  const order = createOrder();
+
+  // Promise
+  placeOrder(order)
+    .then((order) => serveOrder(order))
+    .catch((order) => {
+      orderFailure(order);
+    });
+}
+
+async function pickupPizza() {
+  const order = createOrder();
+
+  // async/await (placeOrder/makePizza have promises in them)
+  try {
+    await placeOrder(order);
+    await makePizza(order);
+    serveOrder(order);
+  } catch (order) {
+    orderFailure(order);
+  }
+}
+```
+
 
 *** add the async and await codepen example
 
