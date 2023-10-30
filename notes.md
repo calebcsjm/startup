@@ -369,6 +369,88 @@ console.log(obj, json, objFromJson);
     - 443 is for HTTPS, 80 is for HTTP, and 22 is for SSH. 443 encrypts network data packest before data transmission takes place
     - HTTP is hypertext transfer protocol
 44. What will the following code using Promises output when executed?
+    - Javascript executes as a single threaded application, so only one piece of code is ever running, but it can run in parallel
+    - promise object is either in states pending, fufilled, or rejected
+    - Create promise by calling Promise constructor and passing it an executor funciton that runs the asych operation
+    - resolve sets it to fulfilled state, reject sets it to rejected state
+    - can use the promise object, and chain then, catch, and finally to it. then is called if the promise is fulfilled, cathc if it is rejected, and finally is always called after it is complete (no longer pending)
+    - Alternatively, you can use async and await to do it
+    - In the following code, setTimeout takes two parameters: an to do when the time runs out, and how long to wait for
+```js
+const coinToss = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (Math.random() > 0.5) {
+      resolve('success');
+    } else {
+      reject('error');
+    }
+  }, 10000);
+});
+
+coinToss
+  .then((result) => console.log(`Coin toss result: ${result}`))
+  .catch((err) => console.log(`Error: ${err}`))
+  .finally(() => console.log('Toss completed'));
+
+// OUTPUT:
+//    Coin toss result: tails
+//    Toss completed
+```
+
+*** add the async and await codepen example
+
+
+
+Other notes: 
+- Local storage
+```js
+let user = 'Alice';
+
+let myObject = {
+  name: 'Bob',
+  info: {
+    favoriteClass: 'CS 260',
+    likesCS: true,
+  },
+};
+
+let myArray = [1, 'One', true];
+
+localStorage.setItem('user', user);
+localStorage.setItem('object', JSON.stringify(myObject));
+localStorage.setItem('array', JSON.stringify(myArray));
+
+console.log(localStorage.getItem('user'));
+console.log(JSON.parse(localStorage.getItem('object')));
+console.log(JSON.parse(localStorage.getItem('array')));
+```
+```
+//output
+Alice
+{name: 'Bob', info: {favoriteClass: 'CS 260', likesCS: true}
+[1, 'One', true]
+```
+- CSS animations
+  - you can define a demo using something like @keyframes, and then add it to that element
+```js
+p {
+  text-align: center;
+  font-size: 20vh;
+
+  animation-name: demo;
+  animation-duration: 3s;
+}
+@keyframes demo {
+  from {
+    font-size: 0vh;
+  }
+
+  to {
+    font-size: 20vh;
+  }
+}
+```
+
 
 
 
