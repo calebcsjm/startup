@@ -221,7 +221,17 @@ a.sort((v1, v2) => v1 - v2);
    - Can't be used for constructors or iterator generators
    - `() => 3` -> `()` contains the parameters (none in this instance), and then the arrow points to what it does. That can be curly braces with a operations and a return statement, or just a constant return like the function above has.
    - Inherit `this` pointer from the scope where it is created, not called.
-8. _What does the following code using map with an array output?_
+8. What does the following code using map with an array output?
+   - map applies a function to each element in an array, like this:
+```js
+const array1 = [1, 4, 9, 16];
+
+// Pass a function to map
+const map1 = array1.map((x) => x * 2);
+
+console.log(map1);
+// Expected output: Array [2, 8, 18, 32]
+```
 9. What does the following code output using getElementByID and addEventListener?
    - `const setHabitButton = document.getElementById("setHabitButton");` gets an element
    - Then the add event listener could attach an event listener to that element so that something happens when it is called
@@ -253,7 +263,10 @@ el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';
    - Can also use it to add event listeners, as discussed above
 12. By default, the HTML span element has a default CSS display property value of:
     - inline
-    - _**should I google others?**_
+    - The following are block-level elements, which always start on a new line and take up the full width available
+      - div, h1-6, p, form, header, footer, section
+    - Inline elements
+      - span, a, img
 13. How would you use CSS to change all the div elements to have a background color of red?
     - `div {background-color: red;}`
 14. How would you display an image with a hyperlink in HTML?
