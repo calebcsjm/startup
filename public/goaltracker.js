@@ -14,7 +14,7 @@ function getPassword() {
     return localStorage.getItem('password') ?? 'Mystery User';
 }
 
-function setHabitInfo() {
+async function setHabitInfo() {
     // store the habit name and description (just in local storage for now) - this will add it to the database
     // once that is functional, and then we will create a new Habit instance to populate everything with the new 
     // data
@@ -25,20 +25,31 @@ function setHabitInfo() {
     console.log(`habit desc: ${habitDescEl.value}`);
 
     if (habitDescEl.value != "" && habitNameEl.value != "") {
-        console.log("Set local storage values")
-        localStorage.setItem("habitSet", true);
-        localStorage.setItem("habitName", habitNameEl.value);
-        localStorage.setItem("habitDesc", habitDescEl.value);
+        const userName = getUserName()
+        const habitName = habitNameEl.value;
+        const habitDesc = habitDescEl.value;
+        const habit = {username: userName, habitName: habitName, habitDesc: habitDesc};
 
-        data = {
-            "username": getUserName(), 
-            "password": getPassword(), 
-            "habitName": habitNameEl.value, 
-            "habitDescription": habitDescEl.value,
-            "history": {}
-        };
-    
-        const newHabit = new Habit(data);
+        // Set the habit name and description for the user
+        try {
+            const response = await fetch('/api/setHabit', {
+                method: 'POST',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify(habit)
+            });
+            console.log("waiting on the response from /api/setHabit")
+            // if it runs successfully, use the data it returns to create a new habit object
+            // NOTE: this might not work
+            const data = await response.json();
+            console.log("successfully ran /api/setHabit");
+            console.log(`Response of the /setHabit call: ${data}`);
+            new Habit(data);
+        } catch {
+            console.log("The /api/setHabit threw an error and was caught");
+            // if it doesn't work, store it locally
+            localStorage.setItem('habitInfo', JSON.stringify(habit));
+            new Habit();
+        }
     }
 }
 
@@ -117,7 +128,7 @@ class Habit {
 
     processData() {
         this.habitName = this.data['habitName'];
-        this.habitDescription = this.data['habitDescription'];
+        this.habitDescription = this.data['habitDesc'];
         this.daysHabitCompleted = Object.keys(this.data["history"]).length
         this.daysSinceStart = this.calculateDaysSinceStart();
         if (this.daysSinceStart == 0) {
