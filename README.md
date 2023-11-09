@@ -55,3 +55,10 @@ This project implements the requirements in the following ways:
 - Database Data: The goaltracker.js file is will take a JSON that I will pull from a database in the future (it is defined locally now) and populate the Habit overview fields, in addition to populating a table with X's for days the habit was completed and O's for days it was missed. The time-related code was pretty messy. 
 - Websocket: There is a Live Updates feature on the Scoreboard page (scores.js) that will use a websocket in the feature (it is similar to what the Simon-javascript had). I also have a placeholder for an API call on the Home page with the quote of the day. 
 - Interaction Login: As mentioned above, the login page uses JavaScript to change substantially when a user logs in or out. It also moves the user to the Tracker page on Login. The Tracker Page starts out with an empty table that prompts input below, and then after a habit and description are entered it populates the table, calculates the values, removes the "set habit" button, and adds a "Completed Habit Today" button, which in the future will update the database. Login with username "caleb" to see the table populated with some dummy data, or with any other username to see the empty table and try entering a habit and description. 
+
+## Startup Service
+- HTTP service with Node and Express: Complete. Frontend code has all been moved into the public folder, and now the website is driven through the index.js file.
+- Frontend served with express static middleware: Complete. See line 13 in the index.js file
+- Frontend calls 3rd part services: Complete. I also used a quote generator in my project, on the login page. See login.js line 69. 
+- Backend provides service endpoints: Complete. I defined 4 endpoints in index.js on lines 19-41, with additional logic implemented below.
+- Frontend calls service endpoints: Complete. loadScores() on scores.js line 4 calls '/api/scoreboard', setHabitInfo() on goaltracker.js lines 35-55 calls '/api/setHabit', completedHabit() on goaltracker.js line 65-76 calls '/api/completeHabit', and getDataFromDatabase() on goaltracker.js lines 146-162 calls '/api/getUserInfo'. 
