@@ -56,10 +56,24 @@ async function setHabitInfo() {
     }
 }
 
-function completedHabit() {
+async function completedHabit() {
     // once the database will set up, this will add today to the list of days where the user has completed
     // their habit
     console.log("In completedHabit() function");
+    const date = {date: getCalendarDate(), dayOfWeek: getCurrentDayOfWeek()};
+    
+    try {
+        const response = await fetch('/api/completeHabit', {
+            method: 'POST', 
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(date)
+        });
+        const userData = await response.json();
+        console.log("The /api/completeHabit ran successfully");
+        new Habit(userData);
+    } catch {
+        console.log("The /api/completeHabit threw an error and was caught");
+    }
 }
 
 class Habit {
@@ -162,9 +176,13 @@ class Habit {
     }
 
     calculateDaysSinceStart() {
-        // convert all the dates into UTC objects
+        // if there is no data, return 0
         if (Object.keys(this.data["history"]).length == 0) {
             return 0;
+        }
+        // if this is the first day, return 1
+        if (Object.keys(this.data["history"]).length == 1 && Object.keys(this.data["history"])[0] === getCalendarDate()){
+            return 1;
         }
         const dates = Object.keys(this.data["history"])
         console.log(dates)
@@ -257,10 +275,6 @@ class Habit {
         }
     }
 
-    getCalendarDate() {
-        return new Date().toISOString().split('T')[0];
-    }
-
     getMidnightUTCFromCalendarDate(calendarDate) {
         // calendarDate is a date in YYYY-MM-DD format
         const temp = calendarDate.split("-");
@@ -268,15 +282,11 @@ class Habit {
         return new Date(temp[0], temp[1] - 1, temp[2]);
     }
 
-    getCurrentDayOfWeek() {
-        return new Date().getDay();
-    }
-
     getTableStartDate() {
         // get the end of the current week
-        var dayOfWeek = this.getCurrentDayOfWeek();
+        var dayOfWeek = getCurrentDayOfWeek();
         console.log(`Current Day of week (0 index): ${dayOfWeek}`)
-        var todayDate = this.getMidnightUTCFromCalendarDate(this.getCalendarDate());
+        var todayDate = this.getMidnightUTCFromCalendarDate(getCalendarDate());
         var endOfWeekSec = todayDate.setDate(todayDate.getDate() + (6 - dayOfWeek));
         console.log(`End of week UTC (today's date): ${endOfWeekSec}`)
 
@@ -298,6 +308,14 @@ class Habit {
     }
 
     
+}
+
+function getCalendarDate() {
+    return new Date().toISOString().split('T')[0];
+}
+
+function getCurrentDayOfWeek() {
+    return new Date().getDay();
 }
 
 const habit = new Habit();

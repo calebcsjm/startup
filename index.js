@@ -22,7 +22,7 @@ apiRouter.post('/setHabit', (req, res) => {
     res.send(userInfo);
 });
 
-// get habit info
+// get habit info - only persistent till service restarts
 apiRouter.post('/getUserInfo', (req, res) => {
     // fs.appendFile("logfile.txt", req);
     const userData = getUserInfo(req.body);
@@ -61,8 +61,8 @@ function getUserInfo(username) {
     }
 }
 
-function completeHabit(username) {
-
+function completeHabit(date) {
+    userInfo['history'][date['date']] = date['dayOfWeek'];
 }
 
 // Return the application's default page if the path is unknown
