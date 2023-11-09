@@ -25,10 +25,11 @@ async function setHabitInfo() {
     console.log(`habit desc: ${habitDescEl.value}`);
 
     if (habitDescEl.value != "" && habitNameEl.value != "") {
-        const userName = getUserName()
+        const username = getUserName()
+        const password = getPassword()
         const habitName = habitNameEl.value;
         const habitDesc = habitDescEl.value;
-        const habit = {username: userName, habitName: habitName, habitDesc: habitDesc};
+        const habit = {username: username, password: password, habitName: habitName, habitDesc: habitDesc};
 
         // Set the habit name and description for the user
         try {
@@ -43,12 +44,14 @@ async function setHabitInfo() {
             const data = await response.json();
             console.log("successfully ran /api/setHabit");
             console.log(`Response of the /setHabit call: ${data}`);
+            console.log(data);
             new Habit(data);
         } catch {
             console.log("The /api/setHabit threw an error and was caught");
-            // if it doesn't work, store it locally
+            // if it doesn't work, add the missing values, and store it locally
+            habit['history'] = {}
             localStorage.setItem('habitInfo', JSON.stringify(habit));
-            new Habit();
+            new Habit(habit);
         }
     }
 }
@@ -65,7 +68,7 @@ class Habit {
         "username": "caleb",
         "password": "harding",
         "habitName": "Anki", 
-        "habitDescription": "Do all my Anki reviews",
+        "habitDesc": "Do all my Anki reviews",
         "history": {
             "2023-10-28": 5,
             "2023-10-26": 3,
@@ -86,12 +89,19 @@ class Habit {
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
     constructor(inputdata) {
         console.log('in the Habit constructor')
-        // if there is data stored, if so, populate it
+        // call a mockConstructor, which can by async
+        this.mockConstructor(inputdata);
+    }
+
+    async mockConstructor(inputdata) {
         if (inputdata != null) {
             this.data = inputdata;
         } else {
-            this.data = this.getDataFromDatabase(getUserName());
+            this.data = await this.getDataFromDatabase(getUserName());
+            console.log('habit constructor, getDataFromDatabase data:')
+            console.log(this.data)
         }
+
         if (this.data != null) {
 
             this.processData();
@@ -114,14 +124,26 @@ class Habit {
         // if no data has been set yet, it just results to the defaults
     }
 
-    getDataFromDatabase(username) {
+    async getDataFromDatabase(userName) {
         // this is where I would get the data from the database, likely in a json format. But for now I will just return a pre-defined json file
-        console.log("In the getDataFromDatabase function")
-        if (this.sampledata['username'] == username) {
-            console.log("Username matches, returning data");
-            return this.sampledata;
-        } else {
-            console.log("No match, returning null");
+        console.log("In the getDataFromDatabase function");
+        console.log(`Username: ${getUserName()}`);
+        const user = {username: userName};
+        try {
+            console.log("getDataFromDatabase: entered try");
+            const response = await fetch('/api/getUserInfo', {
+                method: 'POST',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify(user)
+            });
+            console.log("getDataFromDatabase: sent get request");
+            const userData = await response.json();
+            console.log("getDataFromDatabase: Successfully retieved data");
+            localStorage.setItem('userData', JSON.stringify(userData));
+            return userData;
+        } catch {
+            console.log("getDataFromDatabase: api call failed");
+            // unable to get user data, they must not be in the database
             return null;
         }
     }

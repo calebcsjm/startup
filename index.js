@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const fs = require('fs');
+
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -21,10 +23,17 @@ apiRouter.post('/setHabit', (req, res) => {
 });
 
 // get habit info
+apiRouter.post('/getUserInfo', (req, res) => {
+    // fs.appendFile("logfile.txt", req);
+    const userData = getUserInfo(req.body);
+    res.send(userData);
+});
 
 // add day to habit - this may need to also recalculate the scoreboard, and submit values for everyone
-
-// get habit history
+apiRouter.post('/completeHabit', (req, res) => {
+    completeHabit(req.body);
+    res.send(userInfo);
+});
 
 // get scoreboard
 
@@ -40,6 +49,20 @@ function updateUserInfo(newData) {
     for (const key in newData) {
         userInfo[key] = newData[key]
     }
+}
+
+// this will be expanded when we actually have a database. 
+// for now it just returns the userInfo if it matches and null otherwise
+function getUserInfo(username) {
+    if (userInfo["username"] === username['username']) {
+        return userInfo;
+    } else {
+        return null;
+    }
+}
+
+function completeHabit(username) {
+
 }
 
 // Return the application's default page if the path is unknown
