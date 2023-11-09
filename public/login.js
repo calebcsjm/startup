@@ -5,7 +5,6 @@ if (localStorage.getItem("isLoggedIn")) {
 } else {
     showLoginStuff();
     hideLogoutStuff();
-
 }
 
 function customGreeting() {
@@ -66,32 +65,17 @@ function logout() {
     localStorage.clear();
 }
 
-class QuoteOfTheDay {
-    quote;
-    source;
 
-    constructor () {
-        this.quote = this.getQuote();
-        this.source = this.getSource();
+function setQuote() {
+    fetch('https://api.quotable.io/random')
+        .then((response) => response.json())
+        .then((data) => {
+            const quoteEl = document.querySelector('#loginQuote');
+            const sourceEl = document.querySelector('#loginQuoteSource');
 
-        const quoteEl = document.querySelector('#loginQuote');
-        quoteEl.textContent = "\"" + this.quote + "\"";
-
-        const sourceEl = document.querySelector('#loginQuoteSource');
-        sourceEl.textContent = "- " + this.source;
-    }
-
-    getQuote() {
-        // a dummy function for now, in the future this will call an API
-        // return "A cool quote";
-        return "Remember that if you don't prioritize your life someone else will.";
-    }
-
-    getSource() {
-        // a dummy function for now, in the future this will call an API
-        // return "Someone cool";
-        return "Greg McKeown";
-    }
+            quoteEl.textContent = "\"" + data.content + "\"";
+            sourceEl.textContent = "- " + data.author;
+        });
 }
 
-const quote = new QuoteOfTheDay();
+setQuote();
