@@ -36,6 +36,9 @@ apiRouter.post('/completeHabit', (req, res) => {
 });
 
 // get scoreboard
+apiRouter.get('/scoreboard', (_req, res) => {
+    res.send(mockScoreData);
+});
 
 let userInfo = {
     "username": null, 
@@ -44,6 +47,14 @@ let userInfo = {
     "habitDesc": null,
     "history": {}
 }
+
+const mockScoreData = {
+    "highscores": [
+        {"name": "习近平", "Frequency": 90, "Days": 100, "Score": 90},
+        {"name": "Annie James", "Frequency": 70, "Days": 120, "Score": 84},
+        {"name": "Gunter Spears", "Frequency": 85, "Days": 90, "Score": 77}
+    ]
+};
 
 function updateUserInfo(newData) {
     for (const key in newData) {
