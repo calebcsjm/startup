@@ -60,7 +60,7 @@ async function completedHabit() {
     // once the database will set up, this will add today to the list of days where the user has completed
     // their habit
     console.log("In completedHabit() function");
-    const date = {date: getCalendarDate(), dayOfWeek: getCurrentDayOfWeek()};
+    const date = {username: getUserName(), date: getCalendarDate(), dayOfWeek: getCurrentDayOfWeek()};
     
     try {
         const response = await fetch('/api/completeHabit', {
@@ -70,7 +70,8 @@ async function completedHabit() {
         });
         const userData = await response.json();
         console.log("The /api/completeHabit ran successfully");
-        new Habit(userData);
+        const habit = new Habit(userData);
+        // add a function here to update the frequency values in the database
     } catch {
         console.log("The /api/completeHabit threw an error and was caught");
     }

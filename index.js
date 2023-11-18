@@ -32,9 +32,9 @@ apiRouter.post('/getUserInfo', async (req, res) => {
 });
 
 // add day to habit - this may need to also recalculate the scoreboard, and submit values for everyone
-apiRouter.post('/completeHabit', (req, res) => {
-    completeHabit(req.body);
-    res.send(userInfo);
+apiRouter.post('/completeHabit', async (req, res) => {
+    const userData = await DB.completeHabit(req.body);
+    res.send(userData);
 });
 
 // get scoreboard

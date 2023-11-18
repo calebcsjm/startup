@@ -47,7 +47,20 @@ async function getUserInfo(usernameDict) {
     }
 };
 
-async function completeHabit() {};
+async function completeHabit(info) {
+    const filter = {username: info["username"]};
+    // change this to be history.date : dayofweek
+    const date = info["date"];
+    const historykey = "history." + date;
+    const updateDoc = { $set: { [historykey]: info["dayOfWeek"]}};
+    const result = await habitCollection.updateOne(filter, updateDoc);
+
+    //return the updated doc for the user
+    const userData = await getUserInfo({username: info['username']});
+    return userData;
+};
+
+async function updateUserStats(userStats) {};
 
 async function getScoreboard() {};
 
@@ -66,7 +79,7 @@ async function getScoreboard() {};
 //   return cursor.toArray();
 // }
 
-module.exports = { setHabit, getUserInfo, completeHabit, getScoreboard };
+module.exports = { setHabit, getUserInfo, completeHabit, getScoreboard, updateUserStats};
 
 
 // 4 functions need to be implemented that will be connected to the database
