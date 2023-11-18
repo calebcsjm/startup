@@ -23,35 +23,45 @@
             <li class="nav-item">
               <a class="nav-link active" href="index.html">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="goaltracker.html">Tracker</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="scores.html">Scoreboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="philosophy.html">Philosophy</a>
-            </li>
           </menu>
         </nav>
       </header>
 
-    <main class="container-fluid bg-secondary text-center">
-      <h1 id="greeting">Welcome!</h1>
-      <p id="inviteToLogin">Login to track your habit</p>
-      <form method="get" id="loginInfoCollector" action="goaltracker.html">
-        <div class="form-item"> 
-          <label for="name">Username:</label>
-          <input type="text" id="name" placeholder="Your name here" />  
+      <main class="container-fluid bg-secondary text-center">
+        <div>
+          <h1>Welcome to Priority</h1>
+          <!-- Displayed when needing authentication -->
+          <div id="loginControls" style="display: none">
+            <div class="input-group mb-3">
+              <span class="input-group-text">@</span>
+              <input class="form-control" type="text" id="userName" placeholder="username" />
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">🔒</span>
+              <input class="form-control" type="password" id="userPassword" placeholder="password" />
+            </div>
+            <button type="button" class="btn btn-primary" onclick="loginUser()">Login</button>
+            <button type="button" class="btn btn-primary" onclick="createUser()">Create</button>
+          </div>
+          <!-- Displayed when ready to play -->
+          <div id="habitControls" style="display: none">
+            <div id="userName"></div>
+            <button type="button" class="btn btn-primary" onclick="trackHabit()">Habit Tracker</button>
+            <button type="button" class="btn btn-secondary" onclick="logout()">Logout</button>
+          </div>
         </div>
-        <div class="form-item">
-          <label for="password">Password:</label>
-          <input type="password" id="password" placeholder="Your password here" />  
+  
+        <!-- Error dialog -->
+        <div class="modal fade" id="msgModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-dark">
+              <div class="modal-body">error message here</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <button type="submit" onclick="login()" class="btn btn-primary">Login</button>
-      </form>
-      <button type="submit" onclick="logout()" id="logoutButton" class="btn btn-primary">Log Out</button>
-
 
       <div id="quote-of-day-box" class="quote-box bg-light text-dark">
         <h4 class="quote-of-day">
