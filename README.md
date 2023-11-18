@@ -68,4 +68,9 @@ This project implements the requirements in the following ways:
 - Backend endpoints for manipulating data: There are 2 endpoints to retrieve data and 3 to manipulate it. setHabit sets the initial info for a habit that is input, completeHabit adds the current day to the user's list of days that they completed the habit, and updateStats (which is called after completeHabit) updates the user's stats that are used for the scoreboard. getUserInfo queries all the data for a user from the database, and getScoreboard retrieves the 10 highest scoring users. 
 - Stores data in MongoDB: Although the data is not very diverse yet, you can see what data is already stored by viewing the scoreboards page or logging in with the username of one of those individuals to see their data (for example, username "james" and password "asdf").
 
-
+## Login
+In all honesty, this was a really easy milestone, because we could basically just use the code from the Simon project... I made some small adjustements to use a username instead of an email, which had to be propogated throughout the code, and had to fix a few bugs, but other than that it was almost identical. Hopefully that is alright. 
+- Supports new user registration: Complete. Create button on the home page allows for creation of new users
+- Existing user authentication: Complete. I can log in as people that I previously registered. 
+- Uses MongoDB: Complete. It creates an additional collection in MongoDB for the users that stores their username, hashed password, and token
+- Restricts functionality: Complete. Users cannot access the other pages (like the scoreboard) until they have signed in
