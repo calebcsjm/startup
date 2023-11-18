@@ -71,7 +71,8 @@ async function completedHabit() {
         const userData = await response.json();
         console.log("The /api/completeHabit ran successfully");
         const habit = new Habit(userData);
-        // add a function here to update the frequency values in the database
+        // add a function call  here to update the frequency values in the database
+        const result = await habit.updateStats();
     } catch {
         console.log("The /api/completeHabit threw an error and was caught");
     }
@@ -122,11 +123,16 @@ class Habit {
             this.processData();
             this.setValues();
             
-            // hid the set button, and show the habit today button
+            // habit is already set, so hide the set habit button
             const setHabitButton = document.getElementById("setHabitButton");
             setHabitButton.style.display = "none";
+            // if the habit was already completed today, hide the button
             const completedHabitButton = document.getElementById("habitTodayButton");
-            completedHabitButton.style.display = "unset";
+            if (this.completedHabitToday()) {
+                completedHabitButton.style.display = "none";
+            } else {
+                completedHabitButton.style.display = "unset";
+            }
         } else {
             console.log("In constructor... the data value is null");
             // hid the completed habit today button, and show the set button
@@ -135,8 +141,17 @@ class Habit {
             const setHabitButton = document.getElementById("setHabitButton");
             setHabitButton.style.display = "unset";
         }
-        this.populateTable();
         // if no data has been set yet, it just results to the defaults
+        this.populateTable();   
+    }
+
+    completedHabitToday() {
+        // once the data is loaded, determine if today's date is already included
+        if (Object.keys(this.data["history"]).includes(getCalendarDate())) {
+            return true;
+        } else {
+            return false; 
+        }
     }
 
     async getDataFromDatabase(userName) {
@@ -176,6 +191,21 @@ class Habit {
         this.score = this.frequency * this.daysSinceStart;
     }
 
+    async updateStats() {
+        const userStats = {username: getUserName(), days: this.daysSinceStart, frequency: this.frequency, score: this.score};
+
+        try {
+            const response = await fetch('/api/updateStats', {
+                method: 'POST',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify(userStats)
+            });
+        } catch {
+            console.log("udpateStats: api call failed");
+            // unable to get user data, they must not be in the database
+        }
+    }
+
     calculateDaysSinceStart() {
         // if there is no data, return 0
         if (Object.keys(this.data["history"]).length == 0) {
@@ -187,7 +217,7 @@ class Habit {
         }
         const dates = Object.keys(this.data["history"])
         console.log(dates)
-        const datesUTC = []
+        this.datesUTC = []
         for (const date of dates) {
             datesUTC.push(this.getMidnightUTCFromCalendarDate(date));
         }

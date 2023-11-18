@@ -30,10 +30,10 @@ async function loadScores() {
       const scoreTdEl = document.createElement('td');
 
       positionTdEl.textContent = index;
-      nameTdEl.textContent = entry["name"];
-      frequencyTdEl.textContent = entry["Frequency"];
-      daysTdEl.textContent = entry["Days"];
-      scoreTdEl.textContent = entry["Score"];
+      nameTdEl.textContent = entry["username"];
+      frequencyTdEl.textContent = entry["frequency"];
+      daysTdEl.textContent = entry["days"];
+      scoreTdEl.textContent = entry["score"];
 
       let rowEl = document.createElement('tr');
       rowEl.appendChild(positionTdEl);

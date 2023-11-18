@@ -37,6 +37,12 @@ apiRouter.post('/completeHabit', async (req, res) => {
     res.send(userData);
 });
 
+// update the stats for a user, so that we can query them easily when finding the high scores
+apiRouter.post('/updateStats', async (req, _res) => {
+    const userData = await DB.updateUserStats(req.body);
+    // res.send(userData);
+});
+
 // get scoreboard
 apiRouter.get('/scoreboard', (_req, res) => {
     res.send(mockScoreData);

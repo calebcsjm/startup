@@ -60,7 +60,15 @@ async function completeHabit(info) {
     return userData;
 };
 
-async function updateUserStats(userStats) {};
+async function updateUserStats(userStats) {
+    const filter = {username: userStats["username"]};
+    const updateDoc = {$set: {days: userStats["days"], frequency: userStats["frequency"], score: userStats["score"]}};
+    const result = await habitCollection.updateOne(filter, updateDoc);
+
+    // getthe updated doc for the user, so we can make sure the updates are reflected
+    const userData = await getUserInfo({username: userStats['username']});
+    return userData;
+};
 
 async function getScoreboard() {};
 
