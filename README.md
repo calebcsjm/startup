@@ -62,3 +62,10 @@ This project implements the requirements in the following ways:
 - Frontend calls 3rd part services: Complete. I also used a quote generator in my project, on the login page. See login.js line 69. 
 - Backend provides service endpoints: Complete. I defined 4 endpoints in index.js on lines 19-41, with additional logic implemented below.
 - Frontend calls service endpoints: Complete. loadScores() on scores.js line 4 calls '/api/scoreboard', setHabitInfo() on goaltracker.js lines 35-55 calls '/api/setHabit', completedHabit() on goaltracker.js line 65-76 calls '/api/completeHabit', and getDataFromDatabase() on goaltracker.js lines 146-162 calls '/api/getUserInfo'. 
+
+## Startup DB
+- MongoDB created: Complete
+- Backend endpoints for manipulating data: There are 2 endpoints to retrieve data and 3 to manipulate it. setHabit sets the initial info for a habit that is input, completeHabit adds the current day to the user's list of days that they completed the habit, and updateStats (which is called after completeHabit) updates the user's stats that are used for the scoreboard. getUserInfo queries all the data for a user from the database, and getScoreboard retrieves the 10 highest scoring users. 
+- Stores data in MongoDB: Although the data is not very diverse yet, you can see what data is already stored by viewing the scoreboards page or logging in with the username of one of those individuals to see their data (for example, username "james" and password "asdf").
+
+

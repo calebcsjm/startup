@@ -49,42 +49,6 @@ apiRouter.get('/scoreboard', async (_req, res) => {
     res.send(scores);
 });
 
-let userInfo = {
-    "username": null, 
-    "password": null, 
-    "habitName": null, 
-    "habitDesc": null,
-    "history": {}
-}
-
-const mockScoreData = {
-    "highscores": [
-        {"name": "习近平", "Frequency": 90, "Days": 100, "Score": 90},
-        {"name": "Annie James", "Frequency": 70, "Days": 120, "Score": 84},
-        {"name": "Gunter Spears", "Frequency": 85, "Days": 90, "Score": 77}
-    ]
-};
-
-function updateUserInfo(newData) {
-    for (const key in newData) {
-        userInfo[key] = newData[key]
-    }
-}
-
-// this will be expanded when we actually have a database. 
-// for now it just returns the userInfo if it matches and null otherwise
-function getUserInfo(username) {
-    if (userInfo["username"] === username['username']) {
-        return userInfo;
-    } else {
-        return null;
-    }
-}
-
-function completeHabit(date) {
-    userInfo['history'][date['date']] = date['dayOfWeek'];
-}
-
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
     res.sendFile('index.html', { root: 'public' });

@@ -80,46 +80,4 @@ async function getScoreboard() {
     return cursor.toArray();
 };
 
-// async function addScore(score) {
-//   const result = await scoreCollection.insertOne(score);
-//   return result;
-// }
-
-// function getHighScores() {
-//   const query = { score: { $gt: 0, $lt: 900 } };
-//   const options = {
-//     sort: { score: -1 },
-//     limit: 10,
-//   };
-//   const cursor = scoreCollection.find(query, options);
-//   return cursor.toArray();
-// }
-
 module.exports = { setHabit, getUserInfo, completeHabit, getScoreboard, updateUserStats};
-
-
-// 4 functions need to be implemented that will be connected to the database
-
-// // set habit info, return the userInfo object
-// apiRouter.post('/setHabit', (req, res) => {
-//     updateUserInfo(req.body);
-//     res.send(userInfo);
-// });
-
-// // get habit info - only persistent till service restarts
-// apiRouter.post('/getUserInfo', (req, res) => {
-//     // fs.appendFile("logfile.txt", req);
-//     const userData = getUserInfo(req.body);
-//     res.send(userData);
-// });
-
-// // add day to habit - this may need to also recalculate the scoreboard, and submit values for everyone
-// apiRouter.post('/completeHabit', (req, res) => {
-//     completeHabit(req.body);
-//     res.send(userInfo);
-// });
-
-// // get scoreboard
-// apiRouter.get('/scoreboard', (_req, res) => {
-//     res.send(mockScoreData);
-// });
