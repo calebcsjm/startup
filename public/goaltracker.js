@@ -29,7 +29,7 @@ async function setHabitInfo() {
         const password = getPassword()
         const habitName = habitNameEl.value;
         const habitDesc = habitDescEl.value;
-        const habit = {username: username, password: password, habitName: habitName, habitDesc: habitDesc};
+        const habit = {username: username, password: password, habitName: habitName, habitDesc: habitDesc, history: {}};
 
         // Set the habit name and description for the user
         try {

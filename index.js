@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const DB = require('./database.js');
 
 const fs = require('fs');
 
@@ -17,15 +18,16 @@ var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 // set habit info, return the userInfo object
-apiRouter.post('/setHabit', (req, res) => {
-    updateUserInfo(req.body);
-    res.send(userInfo);
+apiRouter.post('/setHabit', async (req, res) => {
+    const userData = await DB.setHabit(req.body);
+    // updateUserInfo(req.body);
+    res.send(userData);
 });
 
 // get habit info - only persistent till service restarts
-apiRouter.post('/getUserInfo', (req, res) => {
+apiRouter.post('/getUserInfo', async (req, res) => {
     // fs.appendFile("logfile.txt", req);
-    const userData = getUserInfo(req.body);
+    const userData = await DB.getUserInfo(req.body);
     res.send(userData);
 });
 
