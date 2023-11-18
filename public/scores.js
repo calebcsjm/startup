@@ -5,7 +5,7 @@ async function loadScores() {
     scores = await response.json();
 
     console.log("successfully ran /api/scoreboard");
-    localStorage.setItem("highScoreData", JSON.stringify(scoreboard));
+    localStorage.setItem("highScoreData", JSON.stringify(scores));
   } catch {
     console.log("/api/scoreboard failed");
 
