@@ -44,8 +44,9 @@ apiRouter.post('/updateStats', async (req, _res) => {
 });
 
 // get scoreboard
-apiRouter.get('/scoreboard', (_req, res) => {
-    res.send(mockScoreData);
+apiRouter.get('/scoreboard', async (_req, res) => {
+    const scores = await DB.getScoreboard();
+    res.send(scores);
 });
 
 let userInfo = {

@@ -2,18 +2,17 @@ async function loadScores() {
   let scores = [];
   try {
     const response = await fetch('/api/scoreboard');
-    scoreboard = await response.json();
+    scores = await response.json();
 
     console.log("successfully ran /api/scoreboard");
     localStorage.setItem("highScoreData", JSON.stringify(scoreboard));
-    scores = scoreboard['highscores'];
   } catch {
     console.log("/api/scoreboard failed");
 
     // load local storage
     const scoresText = localStorage.getItem('highScoreData');
     if (scoresText) {
-      scores = JSON.parse(scoresText)["highscores"];
+      scores = JSON.parse(scoresText);
       console.log("scores just after parsing:");
       console.log(scores);
     }
@@ -30,6 +29,7 @@ async function loadScores() {
       const scoreTdEl = document.createElement('td');
 
       positionTdEl.textContent = index;
+      index ++;
       nameTdEl.textContent = entry["username"];
       frequencyTdEl.textContent = entry["frequency"];
       daysTdEl.textContent = entry["days"];

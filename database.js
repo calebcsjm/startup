@@ -70,7 +70,15 @@ async function updateUserStats(userStats) {
     return userData;
 };
 
-async function getScoreboard() {};
+async function getScoreboard() {
+    const query = { score: { $gt: 0, $lt: 900 } };
+    const options = {
+        sort: { score: -1 },
+        limit: 10,
+    };
+    const cursor = habitCollection.find(query, options);
+    return cursor.toArray();
+};
 
 // async function addScore(score) {
 //   const result = await scoreCollection.insertOne(score);
