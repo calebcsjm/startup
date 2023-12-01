@@ -100,7 +100,7 @@ class Habit {
     daysHabitCompleted;
     frequency;
     score;
-    datesUTC;
+    // datesUTC;
 
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
     constructor(inputdata) {
@@ -188,12 +188,12 @@ class Habit {
         } else {
             this.frequency = this.daysHabitCompleted / this.daysSinceStart;
         }
-        this.score = this.frequency * this.daysSinceStart;
+        this.score = this.frequency * this.daysHabitCompleted;
     }
 
     async updateStats() {
         const userStats = {username: getUserName(), days: this.daysSinceStart, frequency: this.frequency, score: this.score};
-
+        console.log("In the updateStats function");
         try {
             const response = await fetch('/api/updateStats', {
                 method: 'POST',
@@ -217,14 +217,14 @@ class Habit {
         }
         const dates = Object.keys(this.data["history"])
         console.log(dates)
-        this.datesUTC = []
+        let datesUTC = []
         for (const date of dates) {
             datesUTC.push(this.getMidnightUTCFromCalendarDate(date));
         }
         console.log(datesUTC);
 
         // sort them to find the earliest
-        const earliestDate = datesUTC.sort()[0];
+        const earliestDate = datesUTC.sort().reverse()[0];
         console.log(`Earliest date in data: ${earliestDate}`);
 
         // subtract from present to see how many days it has been
