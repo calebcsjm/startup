@@ -73,6 +73,7 @@ async function completedHabit() {
         const habit = new Habit(userData);
         // add a function call  here to update the frequency values in the database
         const result = await habit.updateStats();
+        console.log(result);
     } catch {
         console.log("The /api/completeHabit threw an error and was caught");
     }
@@ -200,6 +201,7 @@ class Habit {
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify(userStats)
             });
+            console.log(response);
         } catch {
             console.log("udpateStats: api call failed");
             // unable to get user data, they must not be in the database
