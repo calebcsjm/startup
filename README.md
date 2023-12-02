@@ -74,3 +74,10 @@ In all honesty, this was a really easy milestone, because we could basically jus
 - Existing user authentication: Complete. I can log in as people that I previously registered. 
 - Uses MongoDB: Complete. It creates an additional collection in MongoDB for the users that stores their username, hashed password, and token
 - Restricts functionality: Complete. Users cannot access the other pages (like the scoreboard) until they have signed in
+
+## Websocket
+- Backend listens for WebSocket connection: peerProxy.js listens for a http upgrade request and then creates the backend side of the connection.
+- Frontend makes WebSocket connection: The WebSocket is created at the start of the goaltracker.js file, with onopen, onclose, and onmessage functions. 
+- Data sent over connection: Sends a message when other users complete their habit for the day, containing the user's name and their new score. 
+- WebSocket Data displayed: When other users select "Completed Habit Today," other logged in users who are viewing their Tracker page will see the updates, as seen below: 
+![WebSocket example](/images/websocket_example.png)
