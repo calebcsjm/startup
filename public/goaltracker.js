@@ -1,4 +1,32 @@
-// import scoreSocket from "./scores.js";
+class HabitWebSocket {
+    constructor() {
+        const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+        this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+        this.socket.onopen = (event) => {
+            this.displayMsg('Ready for updates on other habit trackers!');
+        };
+        this.socket.onclose = (event) => {
+            this.displayMsg('Unable to get updates on other habit trackers =\'( ');
+        };
+        this.socket.onmessage = async (event) => {
+            const msg = JSON.parse(await event.data.text());
+            this.displayMsg(msg.msg);
+        };
+    }
+    displayMsg(msg) {
+        const chatText = document.querySelector('#live-goal-updates');
+        chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
+      }
+      
+    broadcastEvent(msg) {
+        const event = {
+            msg: msg
+        };
+        this.socket.send(JSON.stringify(event));
+    }
+}
+
+const socket = new HabitWebSocket();
 
 if (localStorage.getItem("userName")) {
     const headerEl = document.querySelector('#goalTrackerPageTitle');
@@ -92,7 +120,6 @@ class Habit {
     frequency;
     score; 
     historyDates;
-    socket;
     // datesUTC;
 
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
@@ -103,8 +130,6 @@ class Habit {
     }
 
     async mockConstructor(completeHabitInitialized) {
-        this.socket = null;
-        this.configureWebSocket();
         const response = await this.getDataFromDatabase(getUserName());
 
         if (response != null) {
@@ -122,10 +147,8 @@ class Habit {
             if (completeHabitInitialized) {
                 console.log("Habit mock constructor: updating the stats");
                 this.updateStats();
-                this.broadcastEvent(`${getUserName()} completed their habit today. Their new score: ${this.score}`);
+                socket.broadcastEvent(`${getUserName()} completed their habit today. Their new score: ${this.score}`);
             }
-            // await this.updateStats();
-            // console.log("stats updated");
             
             // habit is already set, so hide the set habit button
             const setHabitButton = document.getElementById("setHabitButton");
@@ -330,34 +353,6 @@ class Habit {
         }
         return datesUTC;
     }
-// Functionality for peer communication using WebSocket
-configureWebSocket() {
-    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-    this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
-    this.socket.onopen = (event) => {
-      this.displayMsg('Ready for updates on other habit trackers!');
-    };
-    this.socket.onclose = (event) => {
-      this.displayMsg('Unable to get updates on other habit trackers =\'( ');
-    };
-    this.socket.onmessage = async (event) => {
-      const msg = JSON.parse(await event.data.text());
-      this.displayMsg(msg.msg);
-    };
-  }
-  
-  displayMsg(msg) {
-    const chatText = document.querySelector('#live-goal-updates');
-    chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
-  }
-  
-  broadcastEvent(msg) {
-    const event = {
-      msg: msg
-    };
-    this.socket.send(JSON.stringify(event));
-  }
-
 }
 
 const habit = new Habit();
