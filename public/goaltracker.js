@@ -1,3 +1,4 @@
+// import scoreSocket from "./scores.js";
 
 if (localStorage.getItem("userName")) {
     const headerEl = document.querySelector('#goalTrackerPageTitle');
@@ -69,7 +70,14 @@ async function completedHabit() {
         });
         const userData = await response.json();
         console.log("The /api/completeHabit ran successfully");
-        const habit = new Habit();
+        const habit = new Habit(completeHabitInitialized=true);
+
+        // websocket, tell other users that they did their habit for the day
+        // first check to see if this habit is actually the calculated one, or empty
+        console.log("completedHabit, the new habit created:");
+        console.log(habit);
+
+        // scoreSocket.broadcastEvent(`${getUserName()} completed their habit for the day! Their new score: ${habit.score}`);
     } catch {
         console.log("The /api/completeHabit threw an error and was caught");
     }
@@ -84,16 +92,19 @@ class Habit {
     frequency;
     score; 
     historyDates;
+    socket;
     // datesUTC;
 
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
-    constructor() {
+    constructor(completeHabitInitialized=false) {
         console.log('in the Habit constructor')
         // call a mockConstructor, which can be async
-        this.mockConstructor();
+        this.mockConstructor(completeHabitInitialized);
     }
 
-    async mockConstructor() {
+    async mockConstructor(completeHabitInitialized) {
+        this.socket = null;
+        this.configureWebSocket();
         const response = await this.getDataFromDatabase(getUserName());
 
         if (response != null) {
@@ -108,8 +119,11 @@ class Habit {
             this.processData();
             this.setValues();
             // update the frequency values in the database
-            console.log("Habit mock constructor: updating the stats");
-            this.updateStats();
+            if (completeHabitInitialized) {
+                console.log("Habit mock constructor: updating the stats");
+                this.updateStats();
+                this.broadcastEvent(`${getUserName()} completed their habit today. Their new score: ${this.score}`);
+            }
             // await this.updateStats();
             // console.log("stats updated");
             
@@ -184,7 +198,7 @@ class Habit {
 
     async updateStats() {
         console.log("In the updateStats function");
-        const userStats = {username: getUserName(), days: this.daysSinceStart, frequency: this.frequency, score: this.score};
+        const userStats = {username: getUserName(), days: this.daysHabitCompleted, frequency: this.frequency, score: this.score};
         console.log("The userStats dict to be passed to the DB:");
         console.log(userStats);
         try {
@@ -316,6 +330,34 @@ class Habit {
         }
         return datesUTC;
     }
+// Functionality for peer communication using WebSocket
+configureWebSocket() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    this.socket.onopen = (event) => {
+      this.displayMsg('Ready for updates on other habit trackers!');
+    };
+    this.socket.onclose = (event) => {
+      this.displayMsg('Unable to get updates on other habit trackers =\'( ');
+    };
+    this.socket.onmessage = async (event) => {
+      const msg = JSON.parse(await event.data.text());
+      this.displayMsg(msg.msg);
+    };
+  }
+  
+  displayMsg(msg) {
+    const chatText = document.querySelector('#live-goal-updates');
+    chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
+  }
+  
+  broadcastEvent(msg) {
+    const event = {
+      msg: msg
+    };
+    this.socket.send(JSON.stringify(event));
+  }
+
 }
 
 const habit = new Habit();

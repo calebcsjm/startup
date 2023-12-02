@@ -52,39 +52,36 @@ async function loadScores() {
 }
 
 // Functionality for peer communication using WebSocket
+function configureWebSocket() {
+  const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+  const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+  socket.onopen = (event) => {
+    displayMsg('Ready for updates on other habit trackers!');
+  };
+  socket.onclose = (event) => {
+    displayMsg('Unable to get updates on other habit trackers =\'( ');
+  };
+    socket.onmessage = async (event) => {
+    const msg = JSON.parse(await event.data.text());
+    displayMsg(msg.msg);
+  };
+}
 
-class HabitWebSocket {
-  socket; 
+function displayMsg(msg) {
+  const chatText = document.querySelector('#live-goal-updates');
+  chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
+}
 
-  constructor() {
-    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-    this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
-    this.socket.onopen = (event) => {
-      this.displayMsg('Ready for updates on other habit trackers!');
-    };
-    this.socket.onclose = (event) => {
-      this.displayMsg('Unable to get updates on other habit trackers =\'( ');
-    };
-    this.socket.onmessage = async (event) => {
-      const msg = JSON.parse(await event.data.text());
-      this.displayMsg(msg.msg);
-    };
-  }
 
-  displayMsg(msg) {
-    const chatText = document.querySelector('#live-goal-updates');
-    chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
-  }
-
-  // ${user} completed their habit for the day. New Score: ${score}
-  
-  broadcastEvent(msg) {
-    const event = {
-      msg: msg
-    };
-    this.socket.send(JSON.stringify(event));
-  }
+function broadcastEvent(msg) {
+  const event = {
+    msg: msg
+  };
+  this.socket.send(JSON.stringify(event));
 }
 
 loadScores();
-new HabitWebSocket();
+configureWebSocket();
+// new HabitWebSocket();
+
+// export default {broadcastEvent}

@@ -78,6 +78,17 @@
       </div>
 
       <button type="submit" onclick="setHabitInfo()" id="setHabitButton" class="btn btn-primary">Set Habit</button>  
+
+      <!-- Try putting the websocket display in the same place where it is sent, so we don't have to import -->
+      <br>
+      <div class="score-updates"> 
+        <h4 class="update-heading">Live Updates:</h4>
+        <ul class="notification" id="live-goal-updates">
+          <!-- <li class="goal-update">Tim completed his habit for the day. New score: 12</li>
+          <li class="goal-update">Ada completed her habit for the day. New score: 25</li>
+          <li class="goal-update">Sarah has a 50-day streak!</li> -->
+        </ul>
+      </div>
       
     </main>
 

@@ -110,7 +110,6 @@ apiRouter.post('/completeHabit', async (req, res) => {
 // update the stats for a user, so that we can query them easily when finding the high scores
 apiRouter.post('/updateStats', async (req, res) => {
     const userData = await DB.updateUserStats(req.body);
-    console.log("blank space");
     res.send(userData);
 });
 
