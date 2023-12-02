@@ -5,17 +5,19 @@ async function loadScores() {
     scores = await response.json();
 
     console.log("successfully ran /api/scoreboard");
-    localStorage.setItem("highScoreData", JSON.stringify(scores));
+    console.log("Scoreboard:");
+    console.log(scores);
+    // localStorage.setItem("highScoreData", JSON.stringify(scores));
   } catch {
     console.log("/api/scoreboard failed");
 
     // load local storage
-    const scoresText = localStorage.getItem('highScoreData');
-    if (scoresText) {
-      scores = JSON.parse(scoresText);
-      console.log("scores just after parsing:");
-      console.log(scores);
-    }
+    // const scoresText = localStorage.getItem('highScoreData');
+    // if (scoresText) {
+    //   scores = JSON.parse(scoresText);
+    //   console.log("scores just after parsing:");
+    //   console.log(scores);
+    // }
   }
   const tableBodyEl = document.querySelector('#scores');
 
@@ -48,13 +50,41 @@ async function loadScores() {
     tableBodyEl.innerHTML = '<tr><td colSpan=4>Be the first to score</td></tr>';
   }
 }
-  
-loadScores();
 
-// future web socket plug in
-setInterval(() => {
-  const score = Math.floor(Math.random() * 100);
-  const chatText = document.querySelector('#live-goal-updates');
-  chatText.innerHTML =
-    `<li class="goal-update"> Tim completed their habit for the day. New Score: ${score}</div>` + chatText.innerHTML;
-}, 7000);
+// Functionality for peer communication using WebSocket
+
+class HabitWebSocket {
+  socket; 
+
+  constructor() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    this.socket.onopen = (event) => {
+      this.displayMsg('Ready for updates on other habit trackers!');
+    };
+    this.socket.onclose = (event) => {
+      this.displayMsg('Unable to get updates on other habit trackers =\'( ');
+    };
+    this.socket.onmessage = async (event) => {
+      const msg = JSON.parse(await event.data.text());
+      this.displayMsg(msg.msg);
+    };
+  }
+
+  displayMsg(msg) {
+    const chatText = document.querySelector('#live-goal-updates');
+    chatText.innerHTML = `<li class="goal-update"> ${msg} </li>` + chatText.innerHTML;
+  }
+
+  // ${user} completed their habit for the day. New Score: ${score}
+  
+  broadcastEvent(msg) {
+    const event = {
+      msg: msg
+    };
+    this.socket.send(JSON.stringify(event));
+  }
+}
+
+loadScores();
+new HabitWebSocket();

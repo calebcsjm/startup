@@ -70,9 +70,6 @@ async function completedHabit() {
         const userData = await response.json();
         console.log("The /api/completeHabit ran successfully");
         const habit = new Habit();
-        // add a function call  here to update the frequency values in the database
-        const result = await habit.updateStats();
-        console.log(result);
     } catch {
         console.log("The /api/completeHabit threw an error and was caught");
     }
@@ -110,6 +107,11 @@ class Habit {
 
             this.processData();
             this.setValues();
+            // update the frequency values in the database
+            console.log("Habit mock constructor: updating the stats");
+            this.updateStats();
+            // await this.updateStats();
+            // console.log("stats updated");
             
             // habit is already set, so hide the set habit button
             const setHabitButton = document.getElementById("setHabitButton");
@@ -170,7 +172,7 @@ class Habit {
     processData() {
         this.habitName = this.data['habitName'];
         this.habitDescription = this.data['habitDesc'];
-        this.daysHabitCompleted = Object.keys(this.historyDates).length
+        this.daysHabitCompleted = this.historyDates.length
         this.daysSinceStart = this.calculateDaysSinceStart();
         if (this.daysSinceStart === 0) {
             this.frequency = 0;
@@ -181,8 +183,10 @@ class Habit {
     }
 
     async updateStats() {
-        const userStats = {username: getUserName(), days: this.daysSinceStart, frequency: this.frequency, score: this.score};
         console.log("In the updateStats function");
+        const userStats = {username: getUserName(), days: this.daysSinceStart, frequency: this.frequency, score: this.score};
+        console.log("The userStats dict to be passed to the DB:");
+        console.log(userStats);
         try {
             const response = await fetch('/api/updateStats', {
                 method: 'POST',
@@ -194,6 +198,7 @@ class Habit {
             console.log("udpateStats: api call failed");
             // unable to get user data, they must not be in the database
         }
+        console.log("finished the updateStats function");
     }
 
     calculateDaysSinceStart() {

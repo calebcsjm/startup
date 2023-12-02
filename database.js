@@ -87,7 +87,7 @@ async function updateUserStats(userStats) {
     const updateDoc = {$set: {days: userStats["days"], frequency: userStats["frequency"], score: userStats["score"]}};
     const result = await habitCollection.updateOne(filter, updateDoc);
 
-    // getthe updated doc for the user, so we can make sure the updates are reflected
+    // get the updated doc for the user, so we can make sure the updates are reflected
     const userData = await getUserInfo({username: userStats['username']});
     return userData;
 };
@@ -99,7 +99,8 @@ async function getScoreboard() {
         limit: 10,
     };
     const cursor = habitCollection.find(query, options);
-    return cursor.toArray();
+    const scoreboard = cursor.toArray();
+    return scoreboard;
 };
 
 module.exports = { 

@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const DB = require('./database.js');
 const fs = require('fs');
+const { peerProxy } = require('./peerProxy.js');
 
 const authCookieName = 'token';
 
@@ -107,9 +108,10 @@ apiRouter.post('/completeHabit', async (req, res) => {
 });
 
 // update the stats for a user, so that we can query them easily when finding the high scores
-apiRouter.post('/updateStats', async (req, _res) => {
+apiRouter.post('/updateStats', async (req, res) => {
     const userData = await DB.updateUserStats(req.body);
-    // res.send(userData);
+    console.log("blank space");
+    res.send(userData);
 });
 
 // get scoreboard
@@ -132,6 +134,8 @@ function setAuthCookie(res, authToken) {
     });
   }
   
-app.listen(port, () => {    
+const httpService = app.listen(port, () => {    
     console.log(`Listening on port ${port}`);
 });
+
+peerProxy(httpService);
