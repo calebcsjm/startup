@@ -74,10 +74,7 @@ async function getUserInfo(usernameDict) {
 
 async function completeHabit(info) {
     const filter = {username: info["username"]};
-    // change this to be history.date : dayofweek
-    const date = info["date"];
-    const historykey = "history." + date;
-    const updateDoc = { $set: { [historykey]: info["dayOfWeek"]}};
+    const updateDoc = { $push: { "history": info["date"]}};
     const result = await habitCollection.updateOne(filter, updateDoc);
 
     //return the updated doc for the user

@@ -6,12 +6,7 @@ if (localStorage.getItem("userName")) {
 
 function getUserName() {
     console.log("Getting username");
-    return localStorage.getItem('userName') ?? 'Mystery User';
-}
-
-function getPassword() {
-    console.log("Getting password");
-    return localStorage.getItem('password') ?? 'Mystery User';
+    return localStorage.getItem('userName') ?? null;
 }
 
 async function setHabitInfo() {
@@ -26,10 +21,10 @@ async function setHabitInfo() {
 
     if (habitDescEl.value != "" && habitNameEl.value != "") {
         const username = getUserName()
-        const password = getPassword()
+        // const password = getPassword()
         const habitName = habitNameEl.value;
         const habitDesc = habitDescEl.value;
-        const habit = {username: username, password: password, habitName: habitName, habitDesc: habitDesc, history: {}};
+        const habit = {username: username, habitName: habitName, habitDesc: habitDesc, history: []};
 
         // Set the habit name and description for the user
         try {
@@ -40,27 +35,31 @@ async function setHabitInfo() {
             });
             console.log("waiting on the response from /api/setHabit")
             // if it runs successfully, use the data it returns to create a new habit object
-            // NOTE: this might not work
             const data = await response.json();
             console.log("successfully ran /api/setHabit");
-            console.log(`Response of the /setHabit call: ${data}`);
+            console.log("Response of the /setHabit call:");
             console.log(data);
-            new Habit(data);
+            
         } catch {
-            console.log("The /api/setHabit threw an error and was caught");
-            // if it doesn't work, add the missing values, and store it locally
-            habit['history'] = {}
-            localStorage.setItem('habitInfo', JSON.stringify(habit));
-            new Habit(habit);
+            console.log("The /api/setHabit call failed");
         }
+
+        new Habit();
     }
+}
+
+function getTodaysDate() {
+    return new Date(new Date().setHours(24,0,0,0));
 }
 
 async function completedHabit() {
     // once the database will set up, this will add today to the list of days where the user has completed
     // their habit
     console.log("In completedHabit() function");
-    const date = {username: getUserName(), date: getCalendarDate(), dayOfWeek: getCurrentDayOfWeek()};
+
+    // store dates in the database as Date objects
+    const todaysDate = getTodaysDate();
+    const date = {username: getUserName(), date: todaysDate};
     
     try {
         const response = await fetch('/api/completeHabit', {
@@ -70,7 +69,7 @@ async function completedHabit() {
         });
         const userData = await response.json();
         console.log("The /api/completeHabit ran successfully");
-        const habit = new Habit(userData);
+        const habit = new Habit();
         // add a function call  here to update the frequency values in the database
         const result = await habit.updateStats();
         console.log(result);
@@ -80,46 +79,34 @@ async function completedHabit() {
 }
 
 class Habit {
-    // history in sample data is a dictionary of date to the day of the week
-    sampledata = {
-        "username": "caleb",
-        "password": "harding",
-        "habitName": "Anki", 
-        "habitDesc": "Do all my Anki reviews",
-        "history": {
-            "2023-10-28": 5,
-            "2023-10-26": 3,
-            "2023-10-25": 2,
-            "2023-10-23": 0,
-            "2023-10-20": 4
-        }
-    };
     data;
     habitName;
     habitDescription;
     daysSinceStart;
     daysHabitCompleted;
     frequency;
-    score;
+    score; 
+    historyDates;
     // datesUTC;
 
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
-    constructor(inputdata) {
+    constructor() {
         console.log('in the Habit constructor')
-        // call a mockConstructor, which can by async
-        this.mockConstructor(inputdata);
+        // call a mockConstructor, which can be async
+        this.mockConstructor();
     }
 
-    async mockConstructor(inputdata) {
-        if (inputdata != null) {
-            this.data = inputdata;
-        } else {
-            this.data = await this.getDataFromDatabase(getUserName());
-            console.log('habit constructor, getDataFromDatabase data:')
-            console.log(this.data)
-        }
+    async mockConstructor() {
+        const response = await this.getDataFromDatabase(getUserName());
 
-        if (this.data != null) {
+        if (response != null) {
+            this.data = response;
+            this.historyDates = [];
+            const tempHistory = response["history"];
+            for (let dateString of tempHistory) {
+                const tempDate = new Date(dateString);
+                this.historyDates.push(tempDate);
+            }
 
             this.processData();
             this.setValues();
@@ -148,18 +135,20 @@ class Habit {
 
     completedHabitToday() {
         // once the data is loaded, determine if today's date is already included
-        if (Object.keys(this.data["history"]).includes(getCalendarDate())) {
+        const dateMatch = (element) => element.getTime() === getTodaysDate().getTime();
+        
+        if (this.historyDates.some(dateMatch)) {
             return true;
         } else {
             return false; 
         }
     }
 
-    async getDataFromDatabase(userName) {
+    async getDataFromDatabase() {
         // this is where I would get the data from the database, likely in a json format. But for now I will just return a pre-defined json file
         console.log("In the getDataFromDatabase function");
         console.log(`Username: ${getUserName()}`);
-        const user = {username: userName};
+        const user = {username: getUserName()};
         try {
             console.log("getDataFromDatabase: entered try");
             const response = await fetch('/api/getUserInfo', {
@@ -170,7 +159,6 @@ class Habit {
             console.log("getDataFromDatabase: sent get request");
             const userData = await response.json();
             console.log("getDataFromDatabase: Successfully retieved data");
-            localStorage.setItem('userData', JSON.stringify(userData));
             return userData;
         } catch {
             console.log("getDataFromDatabase: api call failed");
@@ -182,10 +170,10 @@ class Habit {
     processData() {
         this.habitName = this.data['habitName'];
         this.habitDescription = this.data['habitDesc'];
-        this.daysHabitCompleted = Object.keys(this.data["history"]).length
+        this.daysHabitCompleted = Object.keys(this.historyDates).length
         this.daysSinceStart = this.calculateDaysSinceStart();
-        if (this.daysSinceStart == 0) {
-            this.frequency = "NA";
+        if (this.daysSinceStart === 0) {
+            this.frequency = 0;
         } else {
             this.frequency = this.daysHabitCompleted / this.daysSinceStart;
         }
@@ -210,28 +198,22 @@ class Habit {
 
     calculateDaysSinceStart() {
         // if there is no data, return 0
-        if (Object.keys(this.data["history"]).length == 0) {
+        if (this.historyDates.length === 0) {
             return 0;
         }
         // if this is the first day, return 1
-        if (Object.keys(this.data["history"]).length == 1 && Object.keys(this.data["history"])[0] === getCalendarDate()){
+        if (this.historyDates.length === 1 && this.completedHabitToday()){
             return 1;
         }
-        const dates = Object.keys(this.data["history"])
-        console.log(dates)
-        let datesUTC = []
-        for (const date of dates) {
-            datesUTC.push(this.getMidnightUTCFromCalendarDate(date));
-        }
-        console.log(datesUTC);
 
-        // sort them to find the earliest
-        const earliestDate = datesUTC.sort().reverse()[0];
+        const sortedDates = this.historyDates.sort((a,b)=> a.getTime() - b.getTime());
+        const earliestDate = sortedDates[0]; // sort in reverse
+
         console.log(`Earliest date in data: ${earliestDate}`);
 
         // subtract from present to see how many days it has been
-        const currentDate = new Date();
-        const differenceInDays = (currentDate.getTime() - earliestDate.getTime()) / (1000 * 3600 * 24);
+        const currentDate = getTodaysDate();
+        const differenceInDays = (currentDate.getTime() - earliestDate.getTime()) / (1000 * 3600 * 24) + 1;
         console.log(differenceInDays);
         return Math.floor(differenceInDays);
     }
@@ -245,6 +227,7 @@ class Habit {
     }
 
     populateTable() {
+        console.log("In populateTable() function");
         // clear the table if anything is there already
         const habitHistoryEl = document.querySelector("#habit-history");
         habitHistoryEl.innerHTML = '';
@@ -259,14 +242,14 @@ class Habit {
             console.log(`table startDate: ${startDate}`);
             // create a dictionary for the last 14 days, with key as the box value, and the value true/false for whether they did it that day
             // let dictionary default to false
-            const entriesUTC = this.convertCalendarDatesToMillisec(Object.keys(this.data['history']));
-            console.log(`populateTable function, entriesUTC: ${entriesUTC}`);
+            const datesUTC = this.convertDatesToUTC(this.historyDates);
+            console.log(`populateTable function, entriesUTC: ${datesUTC}`);
             let completedHabit2Weeks = []
             for (let i = 0; i < 14; i++) {
                 const tempDate = startDate.setDate(startDate.getDate() + 1);
                 console.log(`TempDate: ${tempDate}`);
                 // it should be 1 not i, as it will update the actual value every time...
-                if (entriesUTC.includes(tempDate)) {
+                if (datesUTC.includes(tempDate)) {
                     console.log("This date is included");
                     console.log(startDate);
                     completedHabit2Weeks[i] = true;
@@ -308,47 +291,26 @@ class Habit {
         }
     }
 
-    getMidnightUTCFromCalendarDate(calendarDate) {
-        // calendarDate is a date in YYYY-MM-DD format
-        const temp = calendarDate.split("-");
-        console.log(temp);
-        return new Date(temp[0], temp[1] - 1, temp[2]);
-    }
-
     getTableStartDate() {
         // get the end of the current week
-        var dayOfWeek = getCurrentDayOfWeek();
+        const todaysDate = getTodaysDate();
+        const dayOfWeek = todaysDate.getDay();
         console.log(`Current Day of week (0 index): ${dayOfWeek}`)
-        var todayDate = this.getMidnightUTCFromCalendarDate(getCalendarDate());
-        var endOfWeekSec = todayDate.setDate(todayDate.getDate() + (6 - dayOfWeek));
-        console.log(`End of week UTC (today's date): ${endOfWeekSec}`)
 
-        // return the date that is 14 days before the end of current week
-        var endOfWeekDate = new Date(endOfWeekSec);
-        var startDateSec = endOfWeekDate.setDate(endOfWeekDate.getDate() - 14);
-        var startDate = new Date(startDateSec);
+        let startDate = new Date();
+        startDate.setDate(todaysDate.getDate() - (dayOfWeek + 7));
+        startDate.setHours(0,0,0,0);
         console.log(`Start date of table: ${startDate}`);
         return startDate;
     } 
 
-    convertCalendarDatesToMillisec(entries) {
-        // 
-        let entriesUTC = []
-        for (const entry of entries) {
-            entriesUTC.push(this.getMidnightUTCFromCalendarDate(entry).getTime());
+    convertDatesToUTC(dates) {
+        let datesUTC = []
+        for (const date of dates) {
+            datesUTC.push(date.getTime());
         }
-        return entriesUTC;
+        return datesUTC;
     }
-
-    
-}
-
-function getCalendarDate() {
-    return new Date().toISOString().split('T')[0];
-}
-
-function getCurrentDayOfWeek() {
-    return new Date().getDay();
 }
 
 const habit = new Habit();
