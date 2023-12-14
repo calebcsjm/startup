@@ -8,7 +8,8 @@
       setDisplay('loginControls', 'block');
       setDisplay('habitControls', 'none');
     }
-  })();
+  }
+)();
   
   async function loginUser() {
     loginOrCreate(`/api/auth/login`);

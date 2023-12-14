@@ -38,23 +38,6 @@ main {
     padding: 4px;
 }
 
-.quote-box {
-    margin-top: 2em;
-    padding: 0.5em;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-
-}
-
-.quote-of-day {
-    text-align: left;
-}
-
-.quote-source {
-    text-align: right;
-}
-
 footer {
     flex: 0 30px;
     align-items: center;
