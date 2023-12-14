@@ -2,6 +2,8 @@ import React from 'react';
 
 import Button from 'react-bootstrap/Button';
 import './goaltracker.css';
+import {Updates} from './updates';
+import { HabitNotifier } from './notifier';
 
 function getTodaysDate() {
   return new Date(new Date().setHours(24,0,0,0));
@@ -193,6 +195,8 @@ export function GoalTracker({userName}) {
     .finally(() => {
       update ? setUpdate(false): setUpdate(true); // since the value may have already been changed by setHabit, reverse it to trigger a re-render
     })
+
+    HabitNotifier.broadcastEvent(`${userName} completed their habit today.`);
   }
 
   function setHabitInfo() {
@@ -279,6 +283,9 @@ export function GoalTracker({userName}) {
       {(userInfo === null) && <Button variant='primary' id="setHabitButton" onClick={() => setHabitInfo()}>
         Set Habit 
       </Button>}
+
+      <br></br>
+        <Updates />
     </main>
   );
 }
