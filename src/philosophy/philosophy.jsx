@@ -1,18 +1,19 @@
 import React from 'react';
 
 import './philosophy.css';
+import essImage from "../../public/essentialism.png";
 
 export function Philosophy() {
   return (
     <main className="container-fluid bg-secondary text-center">
 
-      <div id="picture" className="picture-box"><img src="/images/essentialism.png" alt="random" /></div>
+      <div id="picture" className="picture-box"><img src={essImage} alt="essentialism photo" /></div>
 
 
       <p className="attribution">Source: Image created by ReadingGraphics, drawn from ideas in "Essentialism," by Greg Mckeown </p>
 
       <p>
-        Much is said and written about habits. We are usually trying to do too many at once. 
+        Much is said and written about habits. We are usually trying to develop too many at once. 
       </p>
 
       <p>
