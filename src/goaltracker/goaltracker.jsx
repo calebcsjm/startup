@@ -138,6 +138,20 @@ export function GoalTracker({userName}) {
     }
   }
 
+  function updateStats(daysHabitCompleted, frequency, score) {
+    console.log("In the updateStats function");
+    const userStats = {username: userName, days: daysHabitCompleted, frequency: frequency, score: score};
+    fetch('/api/updateStats', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(userStats)
+    })
+    .then(() => 
+      console.log("successfully updatedStats"))
+    .catch(() => 
+      console.log("failed to update stats"));
+  }
+
   if (userInfo !== null) {
     console.log("userInfo is not null");
     console.log(userInfo);
@@ -158,7 +172,8 @@ export function GoalTracker({userName}) {
     } else {
       frequency = daysHabitCompleted / daysSinceStart;
     }
-    score = frequency * daysSinceStart;
+    score = frequency * daysHabitCompleted;
+    updateStats(daysHabitCompleted, frequency, score);
     completedHabitTodayBool = completedHabitToday(historyDates);
   }
 

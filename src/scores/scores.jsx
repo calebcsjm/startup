@@ -28,9 +28,9 @@ export function Scores() {
         <tr>
           <td>{index}</td>
           <td>{entry["username"]}</td>
-          <td>{entry["frequency"]}</td>
+          <td>{entry["frequency"].toFixed(2)}</td>
           <td>{entry["days"]}</td>
-          <td>{entry["score"]}</td>
+          <td>{entry["score"].toFixed(2)}</td>
         </tr>
       )
       index ++;
