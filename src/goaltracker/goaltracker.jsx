@@ -165,7 +165,19 @@ export function GoalTracker({userName}) {
   populateTable();
 
   function completedHabit() {
+    console.log("In completedHabit() function");
+    const todaysDate = getTodaysDate();
+    const date = {username: userName, date: todaysDate}
 
+    fetch('/api/completeHabit', {
+      method: 'POST', 
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(date)
+    })
+    .then((response) => response.json())
+    .finally(() => {
+      update ? setUpdate(false): setUpdate(true); // since the value may have already been changed by setHabit, reverse it to trigger a re-render
+    })
   }
 
   function setHabitInfo() {
