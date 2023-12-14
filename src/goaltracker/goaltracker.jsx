@@ -64,6 +64,7 @@ function convertDatesToUTC(dates) {
 export function GoalTracker({userName}) {
   
   const [userInfo, setUserInfo] = React.useState(null);
+  const [update, setUpdate] = React.useState(false);
   let habitName;
   let habitDesc;
   let daysSinceStart = "NA";
@@ -72,6 +73,7 @@ export function GoalTracker({userName}) {
   let score = "NA"; 
   let historyDates = [];
   let tableData = [];
+  let completedHabitTodayBool;
   // const [habitName, setHabitName] = React.useState(null);
   // const [habitDescription, setHabitDescription] = React.useState(null);
 
@@ -94,7 +96,7 @@ export function GoalTracker({userName}) {
           setUserInfo(JSON.parse(userInfoText));
         }
       });
-  }, []);
+  }, [update]);
 
   function populateTable() {
     console.log("PopulateTable function");
@@ -157,16 +159,38 @@ export function GoalTracker({userName}) {
       frequency = daysHabitCompleted / daysSinceStart;
     }
     score = frequency * daysSinceStart;
-
-    populateTable();
+    completedHabitTodayBool = completedHabitToday(historyDates);
   }
+
+  populateTable();
 
   function completedHabit() {
 
   }
 
   function setHabitInfo() {
-
+    console.log("In setHabitInfo funciton");
+    console.log(`habitName and habitDesc: ${habitName}, ${habitDesc}`);
+    if (habitName != null && habitDesc != null){
+      console.log("We can send the data");
+      const habit = {username: userName, habitName: habitName, habitDesc: habitDesc, history: []};
+      
+      fetch('/api/setHabit', {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify(habit)
+      })
+      .then((response) => response.json())
+      .then((userInfo) =>{
+        console.log("successfully set and returned userInfo in setHabitInfo");
+        setUserInfo(userInfo);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      })
+      .catch(() => {
+        console.log("setHabit api call failed");
+      })
+      .finally(() => setUpdate(true)); // make the page re-render
+    }
   }
 
   return (
@@ -189,11 +213,10 @@ export function GoalTracker({userName}) {
         </tbody>
       </table>
 
-    
+      {(userInfo != null && completedHabitTodayBool === false) && 
       <Button variant='primary' id="habitTodayButton" onClick={() => completedHabit()}>
         Completed Habit Today 
-      </Button>
-      
+      </Button>}
       
       <div className="habit-overview">
         <label for="text">Habit</label>
@@ -203,7 +226,7 @@ export function GoalTracker({userName}) {
           name="varHabit" 
           placeholder="Habit Name"
           value={habitName}
-          onChange={(e) => setHabitName(e.target.value)}
+          onChange={(e) => {habitName = e.target.value}}
         />    
       
         <label for="text">Description</label>
@@ -213,7 +236,7 @@ export function GoalTracker({userName}) {
           name="varHabitDesc" 
           placeholder="Short Description"
           value={habitDesc}
-          onChange={(e) => setHabitDescription(e.target.value)}
+          onChange={(e) => {habitDesc = e.target.value}}
         />   
       
         <label for="count">Days Since Start</label>
@@ -226,9 +249,9 @@ export function GoalTracker({userName}) {
         <input type="text" id="habit-score" value={score} readOnly />
       </div>
 
-      <Button variant='primary' id="setHabitButton" onClick={() => setHabitInfo()}>
+      {(userInfo === null) && <Button variant='primary' id="setHabitButton" onClick={() => setHabitInfo()}>
         Set Habit 
-      </Button>
+      </Button>}
     </main>
   );
 }
