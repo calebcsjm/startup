@@ -24,11 +24,11 @@ Have you ever decided to revamp your life, started on a bunch of new habits, and
 
 ### Images
 
-![Rough sketch of the website design](/public/images/website_sketch.png)
+![Rough sketch of the website design](/public/website_sketch.png)
 
 Overall layout of the website. This is inspired in part by a feature of the flashcard app Anki (see below), which shows the days where reviews have been done, with different intensities of blue reflecting number of reviews, but generalized for any habit. 
 
-![Image of history from Anki](/public/images/anki_tracker.png)
+![Image of history from Anki](/public/anki_tracker.png)
 
 ## HTML
 
@@ -80,4 +80,10 @@ In all honesty, this was a really easy milestone, because we could basically jus
 - Frontend makes WebSocket connection: The WebSocket is created at the start of the goaltracker.js file, with onopen, onclose, and onmessage functions. 
 - Data sent over connection: Sends a message when other users complete their habit for the day, containing the user's name and their new score. 
 - WebSocket Data displayed: When other users select "Completed Habit Today," other logged in users who are viewing their Tracker page will see the updates, as seen below: 
-![WebSocket example](/public/images/websocket_example.png)
+![WebSocket example](/public/websocket_example.png)
+
+## React
+- WebPack/Babel: I followed the instructions in the Simon-React GitHub page to convert my app
+- React Components: I have multiple components, including Scores, Philosophy, Login, Unathenticated, Authenticated, Goaltracker, Updates, etc.
+- React Router: If this is referring to the BrowserRouter, I used that in the app.jsx file to determine which content to load.
+- React Hooks: I used the `useState` and `useEffect` hooks throughout my code - for example, scores.jsx had the `useEffect` hook to query the high scores once when the page loaded, and Updates had a `useState` hook to store the different messages that had been sent to the websocket. 
