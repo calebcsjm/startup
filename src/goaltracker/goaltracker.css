@@ -24,9 +24,3 @@ div.habit-overview label:after { content: ":"; }
 #habitTodayButton {
     margin: 1em;
 }
-/* label {
-    text-align: left;
-}
-input { 
-    align-items: end;
-} */
