@@ -3,9 +3,102 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import './goaltracker.css';
 
-export function GoalTracker() {
-  const [hasHabitInfo, setHasHabitInfo] = React.useState(false);
-  const [isHabitCompletedToday, setHabitCompletedToday] = React.useState(false);
+function getTodaysDate() {
+  return new Date(new Date().setHours(24,0,0,0));
+}
+
+function completedHabitToday(historyDates) {
+  // once the data is loaded, determine if today's date is already included
+  const dateMatch = (element) => element.getTime() === getTodaysDate().getTime();
+  
+  return historyDates.some(dateMatch) ? true: false;
+  // if (historyDates.some(dateMatch)) {
+  //     return true;
+  // } else {
+  //     return false; 
+  // }
+}
+
+function calculateDaysSinceStart(historyDates) {
+  // if there is no data, return 0
+  if (historyDates.length === 0) {
+      return 0;
+  }
+  // if this is the first day, return 1
+  if (historyDates.length === 1 && completedHabitToday(historyDates)){
+      return 1;
+  }
+
+  const sortedDates = historyDates.sort((a,b)=> a.getTime() - b.getTime());
+  const earliestDate = sortedDates[0]; // sort in reverse
+
+  console.log(`Earliest date in data: ${earliestDate}`);
+
+  // subtract from present to see how many days it has been
+  const currentDate = getTodaysDate();
+  const differenceInDays = (currentDate.getTime() - earliestDate.getTime()) / (1000 * 3600 * 24) + 1;
+  console.log(differenceInDays);
+  return Math.floor(differenceInDays);
+}
+
+
+
+export function GoalTracker({userName}) {
+  
+  const [userInfo, setUserInfo] = React.useState(null);
+  let habitName;
+  let habitDesc;
+  let daysSinceStart = "NA";
+  let daysHabitCompleted = "NA";
+  let frequency = "NA";
+  let score = "NA"; 
+  let historyDates = [];
+  // const [habitName, setHabitName] = React.useState(null);
+  // const [habitDescription, setHabitDescription] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch('/api/getUserInfo', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({username: userName})
+    })
+      .then((response) => response.json())
+      .then((userInfo) => {
+        console.log("in useEffect");
+        console.log(userInfo);
+        setUserInfo(userInfo);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      })
+      .catch(() => {
+        const userInfoText = localStorage.getItem('userInfo');
+        if (userInfoText) {
+          setUserInfo(JSON.parse(userInfoText));
+        }
+      });
+  }, []);
+
+  if (userInfo !== null) {
+    console.log("userInfo is not null");
+    console.log(userInfo);
+    habitName = userInfo["habitName"];
+    habitDesc = userInfo["habitDesc"];
+
+    const tempHistory = userInfo["history"];
+      for (let dateString of tempHistory) {
+          const tempDate = new Date(dateString);
+          historyDates.push(tempDate);
+      }
+    console.log(`historyDates: ${historyDates}`);
+
+    daysHabitCompleted = historyDates.length;
+    daysSinceStart = calculateDaysSinceStart(historyDates);
+    if (daysSinceStart === 0) {
+      frequency = 0;
+    } else {
+      frequency = daysHabitCompleted / daysSinceStart;
+    }
+    score = frequency * daysSinceStart;
+  }
 
   function completedHabit() {
 
@@ -34,32 +127,46 @@ export function GoalTracker() {
         </tbody>
       </table>
 
-      {hasHabitInfo && !isHabitCompletedToday (
-        <Button variant='primary' id="habitTodayButton" onClick={() => completedHabit()}>
-          Completed Habit Today 
-        </Button>
-      )}
+    
+      <Button variant='primary' id="habitTodayButton" onClick={() => completedHabit()}>
+        Completed Habit Today 
+      </Button>
+      
       
       <div className="habit-overview">
         <label for="text">Habit</label>
-        <input type="text" id="habit-name" name="varHabit" placeholder="Habit Name"/>    
+        <input 
+          type="text" 
+          id="habit-name" 
+          name="varHabit" 
+          placeholder="Habit Name"
+          value={habitName}
+          onChange={(e) => setHabitName(e.target.value)}
+        />    
       
         <label for="text">Description</label>
-        <input type="text" id="habit-description" name="varHabitDesc" placeholder="Short Description"/>   
+        <input 
+          type="text" 
+          id="habit-description" 
+          name="varHabitDesc" 
+          placeholder="Short Description"
+          value={habitDesc}
+          onChange={(e) => setHabitDescription(e.target.value)}
+        />   
       
         <label for="count">Days Since Start</label>
-        <input type="text" id="day-count" value="--" readonly />
+        <input type="text" id="day-count" value={daysSinceStart} readOnly />
       
         <label for="count">Frequency</label>
-        <input type="text" id="habit-frequency" value="--" readonly />
+        <input type="text" id="habit-frequency" value={frequency} readOnly />
       
         <label for="count">Score</label>
-        <input type="text" id="habit-score" value="--" readonly />
+        <input type="text" id="habit-score" value={score} readOnly />
       </div>
 
-      {!hasHabitInfo && (<Button variant='primary' id="setHabitButton" onClick={() => setHabitInfo()}>
+      <Button variant='primary' id="setHabitButton" onClick={() => setHabitInfo()}>
         Set Habit 
-      </Button> )}
+      </Button>
     </main>
   );
 }

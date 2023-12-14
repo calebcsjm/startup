@@ -57,7 +57,12 @@ export default function App() {
             } 
             exact
           />
-          <Route path='/goaltracker' element={<GoalTracker/>} />
+          <Route path='/goaltracker' 
+            element={
+            <GoalTracker
+            userName={userName}
+            />} 
+          />
           <Route path='/scores' element={<Scores />} />
           <Route path='/philosophy' element={<Philosophy />} />
           <Route path='*' element={<NotFound />} />

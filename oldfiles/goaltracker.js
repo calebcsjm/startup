@@ -120,7 +120,6 @@ class Habit {
     frequency;
     score; 
     historyDates;
-    // datesUTC;
 
     // in the data, if there is an entry for that date, then the habit was completed. if no data, it was not completed
     constructor(completeHabitInitialized=false) {

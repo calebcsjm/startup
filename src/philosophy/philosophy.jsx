@@ -4,12 +4,12 @@ import './philosophy.css';
 
 export function Philosophy() {
   return (
-    <main class="container-fluid bg-secondary text-center">
+    <main className="container-fluid bg-secondary text-center">
 
-      <div id="picture" class="picture-box"><img src="/images/essentialism.png" alt="random" /></div>
+      <div id="picture" className="picture-box"><img src="/images/essentialism.png" alt="random" /></div>
 
 
-      <p class="attribution">Source: Image created by ReadingGraphics, drawn from ideas in "Essentialism," by Greg Mckeown </p>
+      <p className="attribution">Source: Image created by ReadingGraphics, drawn from ideas in "Essentialism," by Greg Mckeown </p>
 
       <p>
         Much is said and written about habits. We are usually trying to do too many at once. 
