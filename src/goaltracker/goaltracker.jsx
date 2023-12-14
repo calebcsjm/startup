@@ -41,7 +41,25 @@ function calculateDaysSinceStart(historyDates) {
   return Math.floor(differenceInDays);
 }
 
+function getTableStartDate() {
+  const todaysDate = getTodaysDate();
+  const dayOfWeek = todaysDate.getDay();
+  console.log(`Current Day of week (0 index): ${dayOfWeek}`)
 
+  let startDate = new Date();
+  startDate.setDate(todaysDate.getDate() - (dayOfWeek + 7));
+  startDate.setHours(0,0,0,0);
+  console.log(`Start date of table: ${startDate}`);
+  return startDate;
+} 
+
+function convertDatesToUTC(dates) {
+  let datesUTC = []
+  for (const date of dates) {
+      datesUTC.push(date.getTime());
+  }
+  return datesUTC;
+}
 
 export function GoalTracker({userName}) {
   
@@ -53,6 +71,7 @@ export function GoalTracker({userName}) {
   let frequency = "NA";
   let score = "NA"; 
   let historyDates = [];
+  let tableData = [];
   // const [habitName, setHabitName] = React.useState(null);
   // const [habitDescription, setHabitDescription] = React.useState(null);
 
@@ -77,6 +96,46 @@ export function GoalTracker({userName}) {
       });
   }, []);
 
+  function populateTable() {
+    console.log("PopulateTable function");
+    if (userInfo !== null) {
+      const startDate = getTableStartDate();
+      const datesUTC = convertDatesToUTC(historyDates);
+
+      let completedHabit2Weeks = []
+      for (let i = 0; i < 14; i++) {
+          const tempDate = startDate.setDate(startDate.getDate() + 1);
+          if (datesUTC.includes(tempDate)) {
+              completedHabit2Weeks[i] = true;
+          } else {
+              completedHabit2Weeks[i] = false;
+        }
+      }
+      console.log(`2 Week Habits: ${completedHabit2Weeks}`);
+
+      for (let i = 0; i < 2; i++) {
+        tableData.push(
+          <tr key={i}>
+            <td>{completedHabit2Weeks[0 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[1 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[2 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[3 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[4 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[5 + 7*i] ? "X" : "O"}</td>
+            <td>{completedHabit2Weeks[6 + 7*i] ? "X" : "O"}</td>
+          </tr>
+        );
+      }
+
+    } else {
+      tableData.push(
+        <tr key='0'>
+          <td colSpan='8'>No habit data yet. Please enter a habit below.</td>
+        </tr>
+      );
+    }
+  }
+
   if (userInfo !== null) {
     console.log("userInfo is not null");
     console.log(userInfo);
@@ -98,6 +157,8 @@ export function GoalTracker({userName}) {
       frequency = daysHabitCompleted / daysSinceStart;
     }
     score = frequency * daysSinceStart;
+
+    populateTable();
   }
 
   function completedHabit() {
@@ -124,6 +185,7 @@ export function GoalTracker({userName}) {
           </tr>
         </thead>
         <tbody id="habit-history">
+          {tableData}
         </tbody>
       </table>
 
