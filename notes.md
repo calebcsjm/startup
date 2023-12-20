@@ -495,9 +495,162 @@ console.log(p);
 // OUTPUT: {first: 'Ryan', last: 'Dahl'}
 ```
 
+## Final Notes: 
+1. What ports are used for HTTP, HTTPS, SSH?
+   - HTTPS: 443, SSH: 22, HTTP: 80
+2. What do HTTP status codes in the 300, 400, 500 range indicate?
+   - 2xx = success. 3xx = redirect to some other location, or that the previoulsy cached resource is still valid. 4xx = client errors, the request is invalid. 5xx = server errors, the request cannot be satisfied due to an error on the server
+3. What does the HTTP header content-type allows you to do?
+   - the format of the content being sent, described using standard MIME types
+4. What do the following attributes of a cookie do?
+   - Domain - The Domain attribute specifies which server can receive a cookie. If the server does not specify a Domain, the cookies are available on the server but not on its subdomains.
+   - Path - The Path attribute indicates a URL path that must exist in the requested URL in order to send the Cookie header.
+   - SameSite - The SameSite attribute lets servers specify whether/when cookies are sent with cross-site requests (where Site is defined by the registrable domain and the scheme: http or https). This provides some protection against cross-site request forgery attacks (CSRF). It takes three possible values: Strict, Lax, and None.
+   - HTTPOnly - A cookie with the HttpOnly attribute is inaccessible to the JavaScript Document.cookie API; it's only sent to the server.
+5. Assuming the following Express middleware, what would be the console.log output for an HTTP GET request with a URL path of /foo/bar?
+   - ??
+6. Given the following Express service code: What does the following JavaScript fetch return?
+   - fetch is the way to make HTTP requests from JavaScript. The fetch function is built into the browser's JavaScript runtime. This means you can call it from JavaScript code running in a browser.
+   - Post example:
+```js
+fetch('https://jsonplaceholder.typicode.com/posts', {
+  method: 'POST',
+  body: JSON.stringify({
+    title: 'test title',
+    body: 'test body',
+    userId: 1,
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+})
+  .then((response) => response.json())
+  .then((jsonResponse) => {
+    console.log(jsonResponse);
+  });
+```
+7. Given the following MongoDB query `{ cost: { $gt: 10 }, name: /fran.*/}` select all of the matching documents.
+   - / is whatever, * at end has no effect? $ means last character, ^ means it starts with that
+1. How should you store user passwords in a database?
+   - hashed, so they can't be used by someone who hacks the db
+1. Assuming the following Node.js service code is executing with websockets, what will be logged to the console of the web browser?
+   - ??
+1. What is the WebSocket protocol used for?
+   - The core feature of WebSocket is that it is fully duplexed. This means that after the initial connection is made from a client, using vanilla HTTP, and then upgraded by the server to a WebSocket connection, the relationship changes to a peer-to-peer connection where either party can efficiently send data at any time.
+   - still only between two parties, so if you want three, there has to be a coordinator
+   - By specifying a port when you create the WebSocketServer, you are telling the server to listen for HTTP connections on that port and to automatically upgrade them to a WebSocket connection if the request has a connection: Upgrade header.
+1. What is JSX and how are the curly braces rendered?
+   - React abstracts HTML into a JavaScript variant called JSX. JSX is converted into valid HTML and JavaScript using a preprocessor called Babel. Curly braces = JS
+12. Assuming a HTML document with a `<div id="root"></div>` element, what content will the following React component generate?
+    - three headers that all say Hello, ___ with the name of the person passed in
+```jsx
+      function Welcome(props) {
+        return <h1>Hello, {props.name}</h1>;
+      }
+      function App() {
+        return (
+          <div>
+            <Welcome name="Sara" />
+            <Welcome name="Cahal" />
+            <Welcome name="Edite" />
+          </div>
+        );
+      }
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+```
+13. Assuming a HTML document with a `<div id="root"></div>` element, what content will the following React component generate?
+    - just a list of numbers with bullets in front (since it is ul)
+```jsx
+    function Numbers() { 
+      const numbers = [1, 2, 3, 4, 5];
+      const listItems = numbers.map((number) =>
+        <li>{number}</li>
+      );
+      return(<ul>{listItems}</ul>)
+    }
+    const root = ReactDOM.createRoot(document.getElementById('root')); 
+    root.render(<Numbers/>);
+```
+14. What does the following React component do?
+    - button with a click count
+```jsx
+function Example() {
+  // Declare a new state variable, which we'll call "count"  
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+15. What are React Hooks used for?
+    - React hooks allow React function style components to be able to do everything that a class style component can do and more.
+    - includes useState
+1. What is the useEffect hook used for?
+   - allows you to represent lifecycle events. For example, you could run a function every time the component completes rendering, or rerender every time a button is changed
+   - You can also take action when the component cleans up by returning a cleanup function from the function registered with useEffect
+```jsx
+function UseEffectHookDemo() {
+  const [count1, updateCount1] = React.useState(0);
+  const [count2, updateCount2] = React.useState(0);
 
+  React.useEffect(() => {
+    console.log(`count1 effect triggered ${count1}`);
+  }, [count1]);
 
+  return (
+    <ol>
+      <li onClick={() => updateCount1(count1 + 1)}>Item 1 - {count1}</li>
+      <li onClick={() => updateCount2(count2 + 1)}>Item 2 - {count2}</li>
+    </ol>
+  );
+}
 
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+```
+17. What does this code do?
+    - sets the route - what things are rendered based on what the url is 
+```jsx
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+18. What role does npm play in web development?
+   - npm is the node package manager, allows you to use preexisting packages of JavaScript for implementing common tasks.
+   - First install the package locally on your machine using the Node Package Manager (NPM), and then include a require statement in your code that references the package name. NPM is automatically installed when you install Node.js.
+19. What does package.json do in a npm project?
+   - This file contains three main things: 1) Metadata about your project such as its name and the default entry JavaScript file, 2) commands (scripts) that you can execute to do things like run, test, or distribute your code, and 3) packages that this project depends upon.
+   - With NPM and the joke package installed, you can now use the joke package in a JavaScript file by referencing the package name as a parameter to the require function. This is then followed by a call to the joke object's getRandomDadJoke function to actually generate a joke.
+1. What does the fetch function do?
+   - see above
+1. What does node.js do?
+   - Node.js was the first successful application for deploying JavaScript outside of a browser. This changed the JavaScript mindset from a browser technology to one that could run on the server as well. This means that JavaScript can power your entire technology stack.  
+1. What does Vite do?
+   - Vite bundles your code quickly, has great debugging support, and allows you to easily support JSX, TypeScript, and different CSS flavors.
+
+Additionally: 
+1. What does Express do?
+   - works great for little projects where you are trying to quickly serve up some web content, but to build a production ready application you need a framework with a bit more functionality for easily implementing a full web service. This is where the Node package Express come in. Express provides support for:
+     - Routing requests for service endpoints
+     - Manipulating HTTP requests with JSON body content
+     - Generating HTTP responses
+     - Using middleware to add functionality
 
 
 
